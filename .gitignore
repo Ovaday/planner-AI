@@ -12,4 +12,6 @@ env/
 venv/ 
 ENV/ 
 env.bak/ 
-venv.bak/ 
+venv.bak/
+.idea/
+virt_env/
