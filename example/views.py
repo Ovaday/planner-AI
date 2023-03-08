@@ -43,9 +43,9 @@ class TutorialBotView(View):
 
         text = text.lstrip("/")
         print(t_chat["id"])
-        chat = Chat.objects.get(chat_id=t_chat["id"])
+        chat = Chat.objects.filter(chat_id=t_chat["id"])
         print(chat)
-        if not chat:
+        if not chat or len(chat) < 1:
             chat = {
                 "chat_id": t_chat["id"],
                 "counter": 0
@@ -56,6 +56,8 @@ class TutorialBotView(View):
             )
             print(response)
             chat["_id"] = response.id
+        else:
+            chat = chat.first()
 
         if text == "+":
             chat.counter += 1
