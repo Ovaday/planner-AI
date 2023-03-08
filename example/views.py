@@ -3,6 +3,9 @@ from datetime import datetime
 
 from django.http import HttpResponse
 
+from telegram.models import Chat
+
+
 def index(request):
     now = datetime.now()
     html = f'''
@@ -40,25 +43,27 @@ class TutorialBotView(View):
 
         text = text.lstrip("/")
         print(t_chat["id"])
-        chat = None
+        chat = Chat.objects.get(chat_id=t_chat["id"])
         if not chat:
             chat = {
                 "chat_id": t_chat["id"],
                 "counter": 0
             }
-            #response = tb_tutorial_collection.insert_one(chat)
-            # we want chat obj to be the same as fetched from collection
-            chat["_id"] = 'response.inserted_id'
+            response = Chat.objects.create(
+                chat_id=chat['chat_id'],
+                counter=chat['counter'],
+            )
+            print(response)
+            chat["_id"] = response.id
 
         if text == "+":
             chat["counter"] += 1
-            #tb_tutorial_collection.save(chat)
+            chat.save()
             msg = f"Number of '+' messages that were parsed: {chat['counter']}"
             self.send_message(msg, t_chat["id"])
         elif text == "restart":
-            blank_data = {"counter": 0}
-            chat.update(blank_data)
-            #tb_tutorial_collection.save(chat)
+            chat.counter = 0
+            chat.save(chat)
             msg = "The Tutorial bot was restarted"
             self.send_message(msg, t_chat["id"])
         else:
