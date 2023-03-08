@@ -67,11 +67,11 @@ class TutorialBotView(View):
             self.send_message(msg, t_chat["id"])
         elif text == "restart":
             chat.counter = 0
-            chat.save(chat)
+            chat.save()
             msg = "The Tutorial bot was restarted"
             self.send_message(msg, t_chat["id"])
         else:
-            msg = "Unknown command"
+            msg = f"Unknown command: {text}"
             self.send_message(msg, t_chat["id"])
 
         return JsonResponse({"ok": "POST request processed"})
