@@ -44,6 +44,7 @@ class TutorialBotView(View):
         text = text.lstrip("/")
         print(t_chat["id"])
         chat = Chat.objects.get(chat_id=t_chat["id"])
+        print(chat)
         if not chat:
             chat = {
                 "chat_id": t_chat["id"],
@@ -57,7 +58,7 @@ class TutorialBotView(View):
             chat["_id"] = response.id
 
         if text == "+":
-            chat["counter"] += 1
+            chat.counter += 1
             chat.save()
             msg = f"Number of '+' messages that were parsed: {chat['counter']}"
             self.send_message(msg, t_chat["id"])
