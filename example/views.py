@@ -60,9 +60,10 @@ class TutorialBotView(View):
             chat = chat.first()
 
         if text == "+":
-            chat.counter += 1
+            current_counter = chat.counter + 1
+            chat.counter = current_counter
             chat.save()
-            msg = f"Number of '+' messages that were parsed: {chat['counter']}"
+            msg = f"Number of '+' messages that were parsed: {current_counter}"
             self.send_message(msg, t_chat["id"])
         elif text == "restart":
             chat.counter = 0
