@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+env.read_env(env.str('ENV_PATH', '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'example'
+    'example',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,16 @@ WSGI_APPLICATION = 'vercel_app.wsgi.application'
 # Note: Django modules for using databases are not support in serverless
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
-DATABASES = {}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': "c42be7e4-6613-4c47-b39d-a5ec922d5141",
+        'USER': "RiSXRSvcgcsjaOZeuFOAjHMmUemDoKED",
+        'PASSWORD': "XQovmIYhZFmKXsugaqKXxmgqvVxjjAaM",
+        'HOST': 'db.thin.dev',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation
