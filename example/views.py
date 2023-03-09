@@ -88,7 +88,7 @@ class TutorialBotView(View):
         elif text == "envs":
             msg = f"Env variable: {os.getenv('VERCEL_URL')}"
             self.send_message(msg, t_chat["id"])
-        elif text[:4] == "chat":
+        elif text[:4] == "chat" or text[:4] == "Chat":
             chatgpt_response = chatGPT_req(text)
             print(chatgpt_response)
             self.send_message(chatgpt_response, t_chat["id"])
