@@ -76,6 +76,7 @@ class TutorialBotView(View):
             msg = f"Env variable: {os.getenv('VERCEL_URL')}"
             self.send_message(msg, t_chat["id"])
         elif text[:4] == "chat":
+            openai.api_key=get_token("OPENAI_API")
             chatgpt_response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
