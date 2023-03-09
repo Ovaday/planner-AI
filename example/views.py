@@ -4,6 +4,7 @@ from datetime import datetime
 import openai
 from django.http import HttpResponse
 
+from helpers.openAIHelper import send_request
 from helpers.tokenHelpers import get_token
 from telegram.models import Chat
 import json
@@ -17,12 +18,14 @@ from django.views import View
 def index(request):
     now = datetime.now()
     openai.api_key = get_token('OPENAI_API')
+    chatgpt_response = send_request('Chat, who are you')
+    print(chatgpt_response)
     html = f'''
     <html>
         <body>
             <h1>Hello from Vercel!</h1>
             <p>The current time is { now }.</p>
-            <p>openai.Model.list is { openai.Model.list() }.</p>
+            <p>openai.Model.list is .</p>
         </body>
     </html>
     '''
@@ -63,8 +66,19 @@ class TutorialBotView(View):
             )
             print(response)
             chat["_id"] = response.id
+            msg = f"ChatGPT advises: go fuck yourself"
+            self.send_message(msg, t_chat["id"])
+            return JsonResponse({"ok": "POST request processed"})
         else:
             chat = chat.first()
+
+        if chat.id != 1:
+            if chat.counter == 0:
+                msg = f"Haven't you understood that correct?"
+            else:
+                msg = f"..."
+            self.send_message(msg, t_chat["id"])
+            return JsonResponse({"ok": "POST request processed"})
 
         if text == "+":
             current_counter = chat.counter + 1
@@ -84,6 +98,7 @@ class TutorialBotView(View):
                     {"role": "user", "content": text}
                 ]
             )
+            print(chatgpt_response)
             self.send_message(chatgpt_response, t_chat["id"])
         elif text == "restart":
             chat.counter = 0
