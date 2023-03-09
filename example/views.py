@@ -75,6 +75,9 @@ class TutorialBotView(View):
         if chat.id != 1:
             if chat.counter == 0:
                 msg = f"Haven't you understood that correct?"
+                current_counter = chat.counter + 1
+                chat.counter = current_counter
+                chat.save()
             else:
                 msg = f"..."
             self.send_message(msg, t_chat["id"])
