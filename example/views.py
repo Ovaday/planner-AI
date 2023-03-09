@@ -52,6 +52,9 @@ class TutorialBotView(View):
         chat = Chat.objects.filter(chat_id=t_chat["id"])
         creator = Chat.objects.get(pk=1)
         print(chat)
+        response = f"Recieved: {text}"
+        self.send_message(response, t_chat["id"])
+
         if not chat or len(chat) < 1:
             chat = {
                 "chat_id": t_chat["id"],
