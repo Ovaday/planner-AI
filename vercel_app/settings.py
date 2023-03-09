@@ -13,6 +13,10 @@ from pathlib import Path
 import environ
 
 from helpers.tokenHelpers import get_token
+import telebot
+
+bot = telebot.TeleBot(get_token('TG_BOT_TOKEN'))
+#bot.set_webhook(url="https://a43b-134-109-211-8.eu.ngrok.io/webhooks/tutorial/")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -23,7 +27,7 @@ SECRET_KEY = get_token("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.eu.ngrok.io']
 
 # Application definition
 
@@ -35,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'example',
-    'telegram',
+    'tg_bot',
 ]
 
 MIDDLEWARE = [

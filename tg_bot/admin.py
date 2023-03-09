@@ -1,5 +1,5 @@
 from django.contrib import admin
-from telegram.models import Chat, ChatAdmin
+from tg_bot.models import Chat, ChatAdmin
 
 # Register your models here.
 admin.site.register(Chat, ChatAdmin)
