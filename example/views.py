@@ -1,5 +1,7 @@
 # example/views.py
 from datetime import datetime
+
+import openai
 from django.http import HttpResponse
 
 from helpers.tokenHelpers import get_token
@@ -14,17 +16,18 @@ from django.views import View
 
 def index(request):
     now = datetime.now()
+    openai.api_key = get_token('OPENAI_API')
     html = f'''
     <html>
         <body>
             <h1>Hello from Vercel!</h1>
             <p>The current time is { now }.</p>
-            <p>Debug mode is { os.getenv('DEBUG_MODE') }.</p>
+            <p>openai.Model.list is { openai.Model.list() }.</p>
         </body>
     </html>
     '''
-    print(os.getenv('TEST_DATA'))
-    print(os.getenv('TEST_DAT'))
+
+    print('ok')
     return HttpResponse(html)
 
 
@@ -72,13 +75,23 @@ class TutorialBotView(View):
         elif text == "envs":
             msg = f"Env variable: {os.getenv('VERCEL_URL')}"
             self.send_message(msg, t_chat["id"])
+        elif text[:3] == "chat":
+            chatgpt_response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": text}
+                ]
+            )
+            self.send_message(chatgpt_response, t_chat["id"])
         elif text == "restart":
             chat.counter = 0
             chat.save()
             msg = "The Tutorial bot was restarted"
             self.send_message(msg, t_chat["id"])
         else:
-            msg = f"Unknown command: {text}"
+            test = text[:3]
+            msg = f"Unknown command: {text}, doesn't fit {test}"
             self.send_message(msg, t_chat["id"])
 
         return JsonResponse({"ok": "POST request processed"})

@@ -9,5 +9,8 @@ def get_token(token_name):
     if token_value:
         return token_value
 
-    token_value = config('LOCAL_' + str(token_name))
-    return token_value
+    try:
+        token_value = config('LOCAL_' + str(token_name))
+        return token_value
+    except:
+        return None
