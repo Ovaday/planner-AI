@@ -65,6 +65,9 @@ class TutorialBotView(View):
             chat.save()
             msg = f"Number of '+' messages that were parsed: {current_counter}"
             self.send_message(msg, t_chat["id"])
+        elif text == "envs":
+            msg = f"Env variable: {os.getenv('VERCEL_URL')}"
+            self.send_message(msg, t_chat["id"])
         elif text == "restart":
             chat.counter = 0
             chat.save()
