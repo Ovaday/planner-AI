@@ -5,3 +5,4 @@ psycopg2~=2.9.5; platform_system == "Windows"
 django-background-tasks
 requests
 openai
+python-decouple
