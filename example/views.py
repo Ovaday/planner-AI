@@ -4,7 +4,7 @@ from datetime import datetime
 import openai
 from django.http import HttpResponse
 
-from helpers.openAIHelper import send_request
+from helpers.openAIHelper import chatGPT_req
 from helpers.tokenHelpers import get_token
 from telegram.models import Chat
 import json
@@ -17,15 +17,11 @@ from django.views import View
 
 def index(request):
     now = datetime.now()
-    openai.api_key = get_token('OPENAI_API')
-    chatgpt_response = send_request('Chat, who are you')
-    print(chatgpt_response)
     html = f'''
     <html>
         <body>
             <h1>Hello from Vercel!</h1>
             <p>The current time is { now }.</p>
-            <p>openai.Model.list is .</p>
         </body>
     </html>
     '''
@@ -93,14 +89,7 @@ class TutorialBotView(View):
             msg = f"Env variable: {os.getenv('VERCEL_URL')}"
             self.send_message(msg, t_chat["id"])
         elif text[:4] == "chat":
-            openai.api_key=get_token("OPENAI_API")
-            chatgpt_response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": text}
-                ]
-            )
+            chatgpt_response = chatGPT_req(text)
             print(chatgpt_response)
             self.send_message(chatgpt_response, t_chat["id"])
         elif text == "restart":

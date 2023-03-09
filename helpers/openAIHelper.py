@@ -2,7 +2,7 @@ import openai
 from helpers.tokenHelpers import get_token
 
 
-def send_request(message):
+def chatGPT_req(message):
     if len(message < 7):
         return None
     openai.api_key = get_token('OPENAI_API')
