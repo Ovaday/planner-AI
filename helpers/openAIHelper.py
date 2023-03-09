@@ -2,7 +2,7 @@ import openai
 from helpers.tokenHelpers import get_token
 
 
-def chatGPT_req(message):
+def chatGPT_req(message, tg_chat):
     print(message)
     if len(message) < 7:
         return None
@@ -10,7 +10,8 @@ def chatGPT_req(message):
     chatgpt_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            #{"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": f"For the answer, use max limit of 200 words. "
+                                          f"Preferred language: {tg_chat.language}"},
             {"role": "user", "content": message}
         ]
     )

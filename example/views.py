@@ -50,6 +50,7 @@ class TutorialBotView(View):
         text = text.lstrip("/")
         print(t_chat["id"])
         chat = Chat.objects.filter(chat_id=t_chat["id"])
+        creator = Chat.objects.get(pk=1)
         print(chat)
         if not chat or len(chat) < 1:
             chat = {
@@ -62,54 +63,69 @@ class TutorialBotView(View):
             )
             print(response)
             chat["_id"] = response.id
-            msg = f"ChatGPT advises: go fuck yourself"
+            msg = f"Please wait for the approval | Пожалуйста подождите одобрения"
             self.send_message(msg, t_chat["id"])
+            msg = "New request from " + str(t_chat["id"])
+            self.send_message(msg, creator.chat_id)
+            msg = f"For now, please select your preferred language: | Пока, выберите предпочитаемый язык:"
+            self.send_message(msg, t_chat["id"], ['english', 'русский'])
             return JsonResponse({"ok": "POST request processed"})
         else:
             chat = chat.first()
 
-        if chat.id != 1:
-            if chat.counter == 0:
-                msg = f"Haven't you understood that correct?"
-                current_counter = chat.counter + 1
-                chat.counter = current_counter
+        if not chat.is_approved:
+            if text != 'english' or text != 'russian':
+                msg = 'Please wait till you are approved | Подождите одобрения'
+            elif text == 'english':
+                msg = f"Language preference is set, thank you"
+                chat.language = 'english'
                 chat.save()
             else:
-                msg = f"..."
+                msg = f"Спасибо, предпочитаемый язык обновлен"
+                chat.language = 'russian'
+                chat.save()
+
             self.send_message(msg, t_chat["id"])
             return JsonResponse({"ok": "POST request processed"})
 
-        if text == "+":
-            current_counter = chat.counter + 1
-            chat.counter = current_counter
-            chat.save()
-            msg = f"Number of '+' messages that were parsed: {current_counter}"
-            self.send_message(msg, t_chat["id"])
-        elif text == "envs":
-            msg = f"Env variable: {os.getenv('VERCEL_URL')}"
-            self.send_message(msg, t_chat["id"])
-        elif text[:4] == "chat" or text[:4] == "Chat":
-            chatgpt_response = chatGPT_req(text)
-            print(chatgpt_response)
-            self.send_message(chatgpt_response, t_chat["id"])
-        elif text == "restart":
+        if text == "restart":
             chat.counter = 0
             chat.save()
-            msg = "The Tutorial bot was restarted"
+            msg = "The bot was restarted"
             self.send_message(msg, t_chat["id"])
         else:
-            msg = f"Unknown command: {text}"
-            self.send_message(msg, t_chat["id"])
+            chat.counter += 1
+            chat.save()
+            if len(text) > 1000:
+                self.send_message('Request is too big', t_chat["id"])
+            else:
+                chatgpt_response = chatGPT_req(text, chat)
+                print(chatgpt_response)
+                self.send_message(chatgpt_response, t_chat["id"])
 
         return JsonResponse({"ok": "POST request processed"})
 
     @staticmethod
-    def send_message(message, chat_id):
+    def send_message(message, chat_id, keyboard_params=None):
+        inline_keyboard = []
+        if keyboard_params:
+            inline_keyboard = message.parse_keyboard(keyboard_params)
+
         data = {
             "chat_id": chat_id,
             "text": message,
             "parse_mode": "Markdown",
         }
+        if len(inline_keyboard) != 0:
+            data['inline_keyboard'] = inline_keyboard
+
         response = requests.post(
             f"{TELEGRAM_URL}{TUTORIAL_BOT_TOKEN}/sendMessage", data=data
         )
+
+    @staticmethod
+    def parse_keyboard(keyboard_params):
+        inline_keyboard = []
+        for param in keyboard_params:
+            inline_keyboard.append({'text': param, 'callback_data': 'string'})
+        return [inline_keyboard]
