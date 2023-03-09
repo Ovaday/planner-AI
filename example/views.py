@@ -76,6 +76,8 @@ class TutorialBotView(View):
         if not chat.is_approved:
             if text != 'english' or text != 'русский':
                 msg = 'Please wait till you are approved | Подождите одобрения'
+                msg = f"For now, please select your preferred language: | Пока, выберите предпочитаемый язык:"
+                self.send_message(msg, t_chat["id"], ['english', 'русский'])
             elif text == 'english':
                 msg = f"Language preference is set, thank you"
                 chat.language = 'english'
