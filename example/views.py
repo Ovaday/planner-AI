@@ -75,7 +75,7 @@ class TutorialBotView(View):
         elif text == "envs":
             msg = f"Env variable: {os.getenv('VERCEL_URL')}"
             self.send_message(msg, t_chat["id"])
-        elif text[:3] == "chat":
+        elif text[:4] == "chat":
             chatgpt_response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -90,8 +90,7 @@ class TutorialBotView(View):
             msg = "The Tutorial bot was restarted"
             self.send_message(msg, t_chat["id"])
         else:
-            test = text[:3]
-            msg = f"Unknown command: {text}, doesn't fit {test}"
+            msg = f"Unknown command: {text}"
             self.send_message(msg, t_chat["id"])
 
         return JsonResponse({"ok": "POST request processed"})
