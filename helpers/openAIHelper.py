@@ -3,13 +3,14 @@ from helpers.tokenHelpers import get_token
 
 
 def chatGPT_req(message):
+    print(message)
     if len(message) < 7:
         return None
     openai.api_key = get_token('OPENAI_API')
     chatgpt_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            #{"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": message}
         ]
     )
