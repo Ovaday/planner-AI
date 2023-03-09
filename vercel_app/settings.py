@@ -13,22 +13,18 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import environ
 
-env = environ.Env()
-env.read_env(env.str('ENV_PATH', '.env'))
-
+from helpers.tokenHelpers import get_token
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=cldztbc4jg&xl0!x673!*v2_=p$$eu)=7*f#d0#zs$44xx-h^'
+SECRET_KEY = get_token("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_token("DEBUG_MODE")
 
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
-
-
 
 # Application definition
 
@@ -82,10 +78,10 @@ WSGI_APPLICATION = 'vercel_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': "c42be7e4-6613-4c47-b39d-a5ec922d5141",
-        'USER': "RiSXRSvcgcsjaOZeuFOAjHMmUemDoKED",
-        'PASSWORD': "XQovmIYhZFmKXsugaqKXxmgqvVxjjAaM",
-        'HOST': 'db.thin.dev',
+        'NAME': get_token("DB_NAME"),
+        'USER': get_token("DB_USER"),
+        'PASSWORD': get_token("DB_PASSWORD"),
+        'HOST': get_token("DB_HOST"),
         'PORT': '5432',
     }
 }

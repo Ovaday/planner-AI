@@ -1,9 +1,15 @@
 # example/views.py
 from datetime import datetime
-
 from django.http import HttpResponse
 
+from helpers.tokenHelpers import get_token
 from telegram.models import Chat
+import json
+import os
+
+import requests
+from django.http import JsonResponse
+from django.views import View
 
 
 def index(request):
@@ -13,20 +19,18 @@ def index(request):
         <body>
             <h1>Hello from Vercel!</h1>
             <p>The current time is { now }.</p>
+            <p>Debug mode is { os.getenv('DEBUG_MODE') }.</p>
         </body>
     </html>
     '''
+    print(os.getenv('TEST_DATA'))
+    print(os.getenv('TEST_DAT'))
     return HttpResponse(html)
 
-import json
-import os
 
-import requests
-from django.http import JsonResponse
-from django.views import View
 
 TELEGRAM_URL = "https://api.telegram.org/bot"
-TUTORIAL_BOT_TOKEN = "6193255741:AAHnh1ZluVB8KkIFXBuhpIent7Fk9Hj5vhM"
+TUTORIAL_BOT_TOKEN = get_token('TG_BOT_TOKEN')
 
 
 # https://api.telegram.org/bot<token>/setWebhook?url=<url>/webhooks/tutorial/
