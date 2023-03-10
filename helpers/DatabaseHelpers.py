@@ -16,6 +16,7 @@ def get_chat(chat_id):
         response = Chat.objects.create(
             chat_id=chat['chat_id'],
             counter=chat['counter'],
+            is_approved=False,
         )
         print(response)
         chat = response

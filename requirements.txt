@@ -6,4 +6,4 @@ django-background-tasks
 requests
 openai
 python-decouple
-pyTelegramBotAPI
+python-telegram-bot
