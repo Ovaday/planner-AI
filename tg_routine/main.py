@@ -31,7 +31,7 @@ async def main(event):
 async def main_wrapper(event):
     try:
         # wait for a task to complete
-        return await asyncio.wait_for(main(event), timeout=9.7)
+        return await asyncio.wait_for(main(event), timeout=9.5)
     except asyncio.TimeoutError:
         my_event = {'update_id': event['update_id'], 'message': {'message_id': event['message']['message_id'],
                                             'from': {'id': event['message']['from']['id'], 'is_bot': False, 'first_name': 'Leo',
@@ -39,7 +39,7 @@ async def main_wrapper(event):
                                             'chat': {'id': event['message']['from']['id'], 'first_name': 'Leo', 'last_name': 'Kalbhenn',
                                                      'type': 'private'}, 'date': event['message']['date'], 'text': '/timeout',
                                             'entities': [{'offset': 0, 'length': 8, 'type': 'bot_command'}]}}
-        return await asyncio.wait_for(main(my_event), timeout=0.3)
+        return await asyncio.wait_for(main(my_event), timeout=0.2)
 
 
 
