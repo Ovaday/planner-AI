@@ -4,7 +4,7 @@ from helpers.tokenHelpers import get_token
 
 def chatGPT_req(message, tg_chat):
     print(message)
-    if len(message) < 7:
+    if len(message) < 5:
         return None
     openai.api_key = get_token('OPENAI_API')
     system_content = f"For the answer, use max limit of 200 words. Preferred language: {tg_chat.language}"

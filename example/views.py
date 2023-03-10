@@ -56,17 +56,20 @@ def send_welcome(message):
             counter=chat['counter'],
         )
         print(response)
-        chat["_id"] = response.id
+        chat = response
+    else:
+        chat = chat.first()
     bot.send_message(chat_id, """\
 Thank you for launch.
 
 Please wait for the approval | Пожалуйста подождите одобрения\
 """)
     creator = Chat.objects.get(pk=1)
-    markup_admin = types.InlineKeyboardMarkup()
-    markup_admin.add(types.InlineKeyboardButton("approve", callback_data=f'approve_{chat_id}'))
-    markup_admin.add(types.InlineKeyboardButton("decline", callback_data=f'decline_{chat_id}'))
-    bot.send_message(creator.chat_id, f"New request from {chat_id}. First Name: {message.chat.first_name}. Username: {message.chat.username}", reply_markup=markup_admin)
+    if not chat.is_approved:
+        markup_admin = types.InlineKeyboardMarkup()
+        markup_admin.add(types.InlineKeyboardButton("approve", callback_data=f'approve_{chat_id}'))
+        markup_admin.add(types.InlineKeyboardButton("decline", callback_data=f'decline_{chat_id}'))
+        bot.send_message(creator.chat_id, f"New request from {chat_id}. First Name: {message.chat.first_name}. Username: {message.chat.username}", reply_markup=markup_admin)
 
     msg = f"For now, please select your preferred language: | Пока, выберите предпочитаемый язык:"
     markup = types.InlineKeyboardMarkup()
@@ -92,9 +95,22 @@ def echo_message(message):
         msg = 'Please wait till you are approved | Подождите одобрения'
         bot.reply_to(message, msg)
     else:
-        msg = 'Hey bro!'
         markup = types.ReplyKeyboardRemove(selective=False)
-        bot.send_message(chat_id, msg, reply_markup=markup)
+        if message.text == 'ChatGPT':
+            if chat.language == 'english':
+                msg = 'Write any text and the answer will be written by the ChatGPT neural network. If the answer comes in English, try specifying (Answer in Russian). Despite the fact that some answers may require a very meaningful response, try not to formulate them so that the answers are longer than the possible maximum length of the message (1 thousand characters).'
+            else:
+                msg = 'Напишите любой текст и ответ на него будет написан нейросетью ChatGPT. Если ответ придет на английском, попробуйте специфицировать (Отвечай на русском). Не смотря на то, что некоторые ответы могут требовать очень содержательного ответа, старайтесь не формулировать их так, чтобы ответы были длиной больше, чем возможная макс. длина сообщения (1 тыс.символов).'
+            bot.send_message(chat_id, msg, reply_markup=markup)
+        else:
+            chat.counter += 1
+            chat.save()
+            if len(message.text) > 1000:
+                bot.send_message(chat_id, 'Error: Text is too big | Текст слишком длинный')
+            else:
+                chatgpt_response = chatGPT_req(message.text, chat)
+                print(chatgpt_response)
+                bot.send_message(chat_id, chatgpt_response)
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query_model(call):
@@ -102,10 +118,6 @@ def callback_query_model(call):
     chat_id = call.message.chat.id
     print(chat_id)
     creator = Chat.objects.get(pk=1)
-    print(creator)
-
-    print(creator.chat_id)
-    print(creator.chat_id == chat_id)
 
     choice = call.data
     chat = Chat.objects.get(chat_id=chat_id)
@@ -120,10 +132,22 @@ def callback_query_model(call):
             chat.save()
         markup = types.ReplyKeyboardRemove(selective=False)
         bot.send_message(call.message.chat.id, msg, reply_markup=markup)
-    elif chat_id == creator.chat_id:
-        #(choice[:7] == 'approve' or choice[:7] == 'decline') and
-        selected_user = choice[8:]
-        print(selected_user)
+    elif (choice[:7] == 'approve' or choice[:7] == 'decline') and str(creator.chat_id) == str(chat_id):
+        chat = Chat.objects.get(chat_id=choice[8:])
+        print(chat)
+        if choice[:7] == 'approve':
+            chat.is_approved = True
+            chat.save()
+            markup = types.ReplyKeyboardMarkup()
+            itembtn1 = types.KeyboardButton('ChatGPT')
+            markup.add(itembtn1)
+            if chat.language == 'english':
+                bot.send_message(chat.chat_id, 'Your account is approved', reply_markup=markup)
+            else:
+                bot.send_message(chat.chat_id, 'Аккаунт подтвержден', reply_markup=markup)
+
+        else:
+            bot.send_message(chat.chat_id, 'Your account is declined')
 
         markup = types.ReplyKeyboardRemove(selective=False)
         bot.send_message(chat_id, choice[:7]+'d', reply_markup=markup)
