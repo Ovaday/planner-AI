@@ -34,6 +34,11 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
 
+async def timeout(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.message
+    chat_id = update.effective_chat.id
+    chat = await async_get_chat(chat_id)
+    await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('timeout', chat.language))
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.message
@@ -84,11 +89,11 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(chat_id=chat_id, text=get_label('chat_gpt_intro', chat.language), reply_markup=reply_markup)
         else:
             await async_tick_counter(chat_id)
-            if len(message.text) > 1000:
+            if len(message.text) > 500:
                 await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('too_long_msg', chat.language))
             elif len(message.text) < 5:
                 await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('too_short_msg', chat.language))
             else:
-                chatgpt_response = chatGPT_req(message.text, chat)
+                chatgpt_response = await chatGPT_req(message.text, chat)
                 print(chatgpt_response)
                 await context.bot.send_message(chat_id=chat_id, text=chatgpt_response)

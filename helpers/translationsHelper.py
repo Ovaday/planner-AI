@@ -24,6 +24,12 @@ labels = {
     'account_is_declined':
         {'russian': 'В регистрации отказано.',
          'english': 'Your account request is declined.'},
+    'response_cut':
+        {'russian': 'Сообщение обрезано.',
+         'english': 'Response message is cut.'},
+    'timeout':
+        {'russian': 'Запрос не был обработан из-за слишком долгого времени обработки. Попробуйте сократить запрос или попробовать позже.',
+         'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
 }
 
 _TYPES = Literal[
@@ -34,7 +40,9 @@ _TYPES = Literal[
     'too_long_msg',
     'too_short_msg',
     'account_is_approved',
-    'account_is_declined'
+    'account_is_declined',
+    'response_cut',
+    'timeout'
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']
