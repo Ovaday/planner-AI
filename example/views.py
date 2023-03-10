@@ -106,7 +106,9 @@ def echo_message(message):
             chat.counter += 1
             chat.save()
             if len(message.text) > 1000:
-                bot.send_message(chat_id, 'Error: Text is too big | Текст слишком длинный')
+                bot.send_message(chat_id, 'Error: Text is too long | Текст слишком длинный')
+            elif len(message.text) < 5:
+                bot.send_message(chat_id, 'Error: Text is too short | Текст слишком короткий')
             else:
                 chatgpt_response = chatGPT_req(message.text, chat)
                 print(chatgpt_response)
