@@ -13,10 +13,6 @@ from pathlib import Path
 import environ
 
 from helpers.tokenHelpers import get_token
-import telebot
-
-bot = telebot.TeleBot(get_token('TG_BOT_TOKEN'))
-#bot.set_webhook(url="https://a43b-134-109-211-8.eu.ngrok.io/webhooks/tutorial/")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
