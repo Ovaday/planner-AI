@@ -31,30 +31,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-"""
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query_model(call):
-    elif (choice[:7] == 'approve' or choice[:7] == 'decline') and str(creator.chat_id) == str(chat_id):
-        chat = Chat.objects.get(chat_id=choice[8:])
-        print(chat)
-        if choice[:7] == 'approve':
-            chat.is_approved = True
-            chat.save()
-            markup = types.ReplyKeyboardMarkup()
-            itembtn1 = types.KeyboardButton('ChatGPT')
-            markup.add(itembtn1)
-            if chat.language == 'english':
-                bot.send_message(chat.chat_id, 'Your account is approved', reply_markup=markup)
-            else:
-                bot.send_message(chat.chat_id, 'Аккаунт подтвержден', reply_markup=markup)
-
-        else:
-            bot.send_message(chat.chat_id, 'Your account is declined')
-
-        markup = types.ReplyKeyboardRemove(selective=False)
-        bot.send_message(chat_id, choice[:7]+'d', reply_markup=markup)
-"""
-
 
 # https://api.telegram.org/bot<token>/setWebhook?url=<url>/webhooks/tutorial/
 class TutorialBotView(View):

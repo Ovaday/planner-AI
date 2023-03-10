@@ -32,7 +32,19 @@ def set_language(chat_id, language):
     chat.language = language
     chat.save()
 
+def set_approved(chat_id, option: bool):
+    chat = Chat.objects.get(chat_id=chat_id)
+    chat.is_approved = option
+    chat.save()
+
+def tick_counter(chat_id):
+    chat = Chat.objects.get(chat_id=chat_id)
+    chat.counter += 1
+    chat.save()
+
 
 async_get_chat = sync_to_async(get_chat)
 async_get_creator = sync_to_async(get_creator)
 async_set_language = sync_to_async(set_language)
+async_set_approved = sync_to_async(set_approved)
+async_tick_counter = sync_to_async(tick_counter)

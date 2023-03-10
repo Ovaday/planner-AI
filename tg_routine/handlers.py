@@ -1,7 +1,8 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
-from helpers.DatabaseHelpers import async_set_language, async_get_chat, async_get_creator
+from helpers.DatabaseHelpers import async_set_language, async_get_chat, async_get_creator, async_set_approved, \
+    async_tick_counter
 from helpers.openAIHelper import chatGPT_req
 from helpers.translationsHelper import get_label
 
@@ -15,18 +16,20 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if (choice == 'english' or choice == 'russian'):
         await async_set_language(chat_id, choice)
         await query.edit_message_text(text=f"{get_label('language_is_set', choice)}")
+        await context.bot.send_message(chat_id=chat_id, text=get_label('wait_till_approved', choice))
+
     elif (choice[:7] == 'approve' or choice[:7] == 'decline') and str(creator.chat_id) == str(chat_id):
         chat = await async_get_chat(choice[8:])
         print(chat)
         if choice[:7] == 'approve':
-            chat.is_approved = True
-            chat.save()
+            await async_set_approved(chat.chat_id, True)
             reply_keyboard = [['ChatGPT']]
             reply_markup = ReplyKeyboardMarkup(
-                reply_keyboard, one_time_keyboard=True
-            ),
+                reply_keyboard, one_time_keyboard=True, input_field_placeholder="ChatGPT"
+            )
             await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_approved', chat.language), reply_markup=reply_markup)
         else:
+            await async_set_approved(chat.chat_id, False)
             await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language))
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
@@ -77,10 +80,10 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('wait_till_approved', chat.language))
     else:
         if message.text == 'ChatGPT':
-            await context.bot.send_message(chat_id=chat_id, text=get_label('chat_gpt_intro', chat.language))
+            reply_markup = ReplyKeyboardRemove()
+            await context.bot.send_message(chat_id=chat_id, text=get_label('chat_gpt_intro', chat.language), reply_markup=reply_markup)
         else:
-            chat.counter += 1
-            chat.save()
+            await async_tick_counter(chat_id)
             if len(message.text) > 1000:
                 await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('too_long_msg', chat.language))
             elif len(message.text) < 5:
