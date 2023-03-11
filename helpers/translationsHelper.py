@@ -10,7 +10,11 @@ labels = {
         {'russian': 'Подождите одобрения',
          'english': 'Please wait till you are approved'},
     'chat_gpt_intro':
-        {'russian': 'Напишите любой текст и ответ на него будет написан нейросетью ChatGPT. Если ответ придет на английском, попробуйте специфицировать (Отвечай на русском). Не смотря на то, что некоторые ответы могут требовать очень содержательного ответа, старайтесь не формулировать их так, чтобы ответы были длиной больше, чем возможная макс. длина сообщения (1 тыс.символов).',
+        {'russian': """Напишите любой текст и ответ на него будет написан нейросетью ChatGPT. Если ответ придет на английском, попробуйте специфицировать (Отвечай на русском). Не смотря на то, что некоторые ответы могут требовать очень содержательного ответа, старайтесь не формулировать их так, чтобы ответы были длиной больше, чем возможная макс. длина сообщения (1 тыс.символов). 
+Примеры:
+        'Привет'
+        'Что ты такое?'
+        'В чем различие между профилем и анфасом?'""",
          'english': 'Write any text and the answer will be written by the ChatGPT neural network. If the answer comes in English, try specifying (Answer in Russian). Despite the fact that some answers may require a very meaningful response, try not to formulate them so that the answers are longer than the possible maximum length of the message (1 thousand characters).'},
     'too_long_msg':
         {'russian': 'Ошибка: Сообщение слишком длинное.',
