@@ -83,7 +83,7 @@ async def lambda_call_wrapper(event):
     return JsonResponse({"ok": "POST request processed"})
 
 async def lambda_call(event):
-    key = bytes(get_token('COMMON_KEY'), 'utf-8')
+    key = bytes(str(get_token('COMMON_KEY')), 'utf-8')
     fernet = Fernet(key)
     encMessage = fernet.encrypt(bytes(event,'utf-8'))
     gateway_url = get_token('GATEWAY_URL')
