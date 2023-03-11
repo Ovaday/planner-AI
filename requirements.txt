@@ -7,3 +7,4 @@ requests
 openai
 python-decouple
 python-telegram-bot
+cryptography
