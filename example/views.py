@@ -1,7 +1,6 @@
 import logging
-from datetime import datetime
+from django.shortcuts import render
 
-from django.http import HttpResponse
 from helpers.openAIHelper import chatGPT_req
 import json
 
@@ -11,19 +10,22 @@ from django.views import View
 from tg_routine.main import lambda_handler
 
 
-def index(request):
-    now = datetime.now()
-    html = f'''
-    <html>
-        <body>
-            <h1>Hello from Vercel!</h1>
-            <p>The current time is { now }.</p>
-        </body>
-    </html>
-    '''
+def index(response):
+    current_user = response.user
+    username = "anonymous"
+    if current_user.id != "": username = current_user.username
+    if response.method == "GET":
+        print('GET response')
 
-    print('ok')
-    return HttpResponse(html)
+    elif response.method == 'POST':
+        print('POST response')
+
+    context = {"form": "none"}
+    return render(response, "index.html", context)
+
+
+def error_404_view(response):
+    return render(response, "404.html")
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO

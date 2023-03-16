@@ -21,6 +21,9 @@ from helpers.tokenHelpers import get_token
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_token("DJANGO_SECRET")
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
@@ -54,7 +57,7 @@ ROOT_URLCONF = 'vercel_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
