@@ -490,11 +490,15 @@
 </section><!-- End Frequently Asked Questions Section -->
 
 <!-- ======= Contact Section ======= -->
-<section id="contact" class="contact">
+{% block contact %}
     <div class="container" data-aos="fade-up">
 
         <div class="section-title">
             <h2>Contact</h2>
+            <!-- Alert-Кнопка -->
+            <button class="btn btn-warning" type="button" onclick="alert('I Love Django <3');">Alert Кнопка </button>
+            <button class="btn btn-warning" type="button" onclick="alert('сообщение отправлено')";">Отправить </button>
+            <!-- Alert-Кнопка -->
             <h3><span>Contact Us</span></h3>
             <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
         </div>
@@ -560,8 +564,7 @@
         </div>
 
     </div>
-</section>
-{% endblock %}
+    {% endblock %} <!-- Contact -->
 
-
-{% endblock %}
+{% endblock %} <!-- Main -->
+{% endblock %} <!-- Body -->
