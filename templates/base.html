@@ -39,29 +39,19 @@
 </section>
 
 <header id="header" class="d-flex align-items-center">
-    {% block header %}
-        <nav id="navbar" class="navbar">
-            <img src="{% static 'img/about.jpg' %}" class="img-fluid" alt="">
-            {% block navbar%}
-
-            {% endblock %}
-        </nav>
-    {% endblock %}
+    {% block header %}{% endblock %}
 </header>
 
 <section id="hero" class="d-flex align-items-center">
-    {% block hero %}
-    {% endblock %}
+    {% block hero %}{% endblock %}
 </section>
 
 <main id="main">
-    {% block about %}
-    {% endblock %}
+    {% block about %}{% endblock %}
 </main>
 
 <section id="contact" class="contact">
-    {% block contact %}
-    {% endblock %}
+    {% block contact %}{% endblock %}
 </section>
 
 {% endblock %}

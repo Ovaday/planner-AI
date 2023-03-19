@@ -24,7 +24,7 @@
 
 {% block header %}
     <div class="container d-flex align-items-center justify-content-between">
-{% block navbar %}
+        <nav id="navbar" class="navbar">
 <ul>
     <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
     <li><a class="nav-link scrollto" href="#about">About</a></li>
@@ -50,7 +50,7 @@
     <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
 </ul>
 <i class="bi bi-list mobile-nav-toggle"></i>
-{% endblock %}
+        </nav>
     </div>
 {% endblock %}
 
@@ -66,7 +66,6 @@
 {% endblock %}
 
 {% block about %}
-
 
 <!-- ======= About Section ======= -->
 <section id="about" class="about section-bg">
@@ -112,9 +111,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 <!-- ======= Clients Section ======= -->
 <section id="clients" class="clients section-bg">
@@ -398,7 +394,7 @@
             </div>
 
             <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <img src="img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
+                <img src="       img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
                 <div class="portfolio-info">
                     <h4>Web 3</h4>
                     <p>Web</p>
@@ -486,8 +482,8 @@
         </div>
 
     </div>
-</section><!-- End Frequently Asked Questions Section -->
-
+</section>
+    {% endblock %} <!-- Block about -->
 <!-- ======= Contact Section ======= -->
 {% block contact %}
     <div class="container" data-aos="fade-up">
@@ -564,6 +560,4 @@
 
     </div>
     {% endblock %} <!-- Contact -->
-
-{% endblock %} <!-- Main -->
 {% endblock %} <!-- Body -->
