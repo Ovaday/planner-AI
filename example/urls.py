@@ -1,10 +1,9 @@
 # example/urls.py
 from django.urls import path
 
-from example.views import index, base
+from example.views import index
 
 
 urlpatterns = [
     path('', index),
-    path('base', base),
 ]
