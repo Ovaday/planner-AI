@@ -19,12 +19,15 @@ from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.views.decorators.csrf import csrf_exempt
 
+from example import views as example_views
+
 from example.views import TutorialBotView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('example.urls')),
     path('webhooks/tutorial/', csrf_exempt(TutorialBotView.as_view())),
+    path('', example_views.index, name='home'),
+    path('', include("django.contrib.auth.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

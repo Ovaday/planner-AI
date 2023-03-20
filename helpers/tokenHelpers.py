@@ -10,7 +10,7 @@ def get_token(token_name):
         return token_value
 
     try:
-        token_value = config('LOCAL_' + str(token_name))
+        token_value = config(str(token_name))
         return token_value
     except:
         return None
