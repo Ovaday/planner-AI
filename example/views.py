@@ -9,21 +9,6 @@ from django.views import View
 
 from tg_routine.main import lambda_handler
 
-
-def base(response):
-
-        current_user = response.user
-        username = "anonymous"
-        if current_user.id != "": username = current_user.username
-        if response.method == "GET":
-            print('GET response')
-
-        elif response.method == 'POST':
-            print('POST response')
-
-        context = {"form": "none"}
-        return render(response, "base.html", context)
-
 def index(response):
     current_user = response.user
     username = "anonymous"
