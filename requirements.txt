@@ -8,3 +8,4 @@ openai
 python-decouple
 python-telegram-bot
 cryptography
+aws-secretsmanager-caching
