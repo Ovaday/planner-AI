@@ -13,11 +13,12 @@ import os
 from pathlib import Path
 import environ
 
-from helpers.tokenHelpers import get_token
+from helpers.tokenHelpers import get_token, retrieve_and_cache_secrets, get_db_conn
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+SECRETS = retrieve_and_cache_secrets()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_token("DJANGO_SECRET")
 
@@ -79,14 +80,7 @@ WSGI_APPLICATION = 'vercel_app.wsgi.application'
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_token("DB_NAME"),
-        'USER': get_token("DB_USER"),
-        'PASSWORD': get_token("DB_PASSWORD"),
-        'HOST': get_token("DB_HOST"),
-        'PORT': '5432',
-    }
+    'default': get_db_conn()
 }
 
 
