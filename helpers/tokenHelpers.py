@@ -16,9 +16,10 @@ def retrieve_and_cache_secrets():
         region_name=get_token("IAM_AWS_REGION")
     )
     cache_config = SecretCacheConfig()
-    cache = SecretCache( config = cache_config, client = client)
+    cache = SecretCache(config=cache_config, client=client)
 
     return cache
+
 
 def get_token(token_name):
     if len(token_name) < 1:
@@ -36,6 +37,7 @@ def get_token(token_name):
         return token_value
     except:
         return None
+
 
 def get_db_conn():
     return {
