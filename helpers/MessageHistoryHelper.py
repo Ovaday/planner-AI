@@ -1,16 +1,12 @@
 import pymongo
 from datetime import datetime
-import os
-from os.path import join, dirname
-from dotenv import load_dotenv
+from tokenHelpers import get_token
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+DATABASE_USER_NAME = get_token("DATABASE_USER_NAME")
+DATABASE_USER_PASSWORD = get_token("DATABASE_USER_PASSWORD")
+DATABASE_ENVIROMENT = get_token("DATABASE_ENVIROMENT")
 
-DATABASE_USER_NAME = os.environ.get("DATABASE_USER_NAME")
-DATABASE_USER_PASSWORD = os.environ.get("DATABASE_USER_PASSWORD")
-
-client = pymongo.MongoClient("mongodb+srv://"+DATABASE_USER_NAME+":"+DATABASE_USER_PASSWORD+"@planneraidev.efkepet.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient("mongodb+srv://"+DATABASE_USER_NAME+":"+DATABASE_USER_PASSWORD+"@"+DATABASE_ENVIROMENT+"/?retryWrites=true&w=majority")
 
 db = client["messages-database"]
 
