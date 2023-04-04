@@ -16,3 +16,5 @@ env.bak/
 venv.bak/
 .idea/
 virt_env/
+resources/extracted/
+*-checkpoint.ipynb
