@@ -1,14 +1,17 @@
 # Imports and functions
 import os
-
 from pathlib import Path
-
 from helpers.tokenHelpers import get_token
 from os import listdir
 from os.path import isfile, join
 from cryptography.fernet import Fernet
 from builtins import open
 
+from io import StringIO
+
+root_file_path = Path(__file__).resolve().parent.parent
+basedir_extracted = os.path.join(root_file_path, 'resources/extracted/')
+basedir_packed = os.path.join(root_file_path, 'resources/')
 
 def listFiles(resourcesPath, is_encrypt):
     if is_encrypt:
@@ -46,25 +49,26 @@ def encrypt(filename_origin, filename_destination, key):
 
 
 def decrypt(filename_origin, filename_destination, key):
-    decrypted_data, f = read_encrypted(filename_origin, key)
+    decrypted_data, f = read_encrypted(filename_origin, key, False)
     filename_destination = handleExtension(filename_destination, False)
     # write the original file
     with open(filename_destination, "wb") as file:
         file.write(decrypted_data)
 
-def read_encrypted(filename, key):
-    f = Fernet(key)
-    with open(filename, "rb") as file:
-        encrypted_data = file.read()
-    decrypted_data = f.decrypt(encrypted_data)
-    return decrypted_data, f
-
 def get_fernet_key():
     return bytes(str(get_token('COMMON_KEY')), 'utf-8')
 
-root_file_path = Path(__file__).resolve().parent.parent
-basedir_extracted = os.path.join(root_file_path, 'resources/extracted/')
-basedir_packed = os.path.join(root_file_path, 'resources/')
+def read_encrypted(filename, key=get_fernet_key(), is_normal_read=True):
+    filename_destination = handleExtension(basedir_packed + filename, True)
+    f = Fernet(key)
+    with open(filename_destination, "rb") as file:
+        encrypted_data = file.read()
+    decrypted_data = f.decrypt(encrypted_data)
+    if not is_normal_read:
+        return decrypted_data, f
+    else:
+        csvStringIO = StringIO(decrypted_data.decode("utf-8"))
+        return csvStringIO
 
 # Unpack resources using the key
 def unpack_resources():
