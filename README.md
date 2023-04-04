@@ -23,6 +23,18 @@ python manage.py runserver
 The last command actually starts the server:
 ![img.png](img.png)
 
+## Working with local data files
+
+To decrypt (unpack) .enc files in /resources/ run:
+```bash
+python manage.py encrypt_resources
+```
+
+To encrypt (pack) files in /resources/extracted/, for example to push them to git, run:
+```bash
+python manage.py encrypt_resources
+```
+
 ## How it Works
 
 Our Django application, `example` is configured as an installed application in `vercel_app/settings.py`:
@@ -104,4 +116,3 @@ If you have changed the data structure:
 python manage.py makemigrations
 python manage.py migrate
 ```
-.
