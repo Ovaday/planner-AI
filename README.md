@@ -27,7 +27,7 @@ The last command actually starts the server:
 
 To decrypt (unpack) .enc files in /resources/ run:
 ```bash
-python manage.py encrypt_resources
+python manage.py decrypt_resources
 ```
 
 To encrypt (pack) files in /resources/extracted/, for example to push them to git, run:
