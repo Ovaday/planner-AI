@@ -1,3 +1,4 @@
+import json
 import os
 from decouple import config
 import boto3
@@ -30,12 +31,14 @@ def get_token(token_name):
         return token_value
 
     try:
-        if "IAM_" not in token_name or "DEBUG_MODE" not in token_name or config('ENV') == "PROD":
+        if "IAM_" in token_name or "DEBUG_MODE" in token_name or config('ENV') == "PROD":
             token_value = config(str(token_name))
         else:
-            token_value = settings.SECRETS.get_secret_string("dev/plannerAI")[str(token_name)]
+            tokens = json.loads(settings.SECRETS.get_secret_string("dev/plannerAI"))
+            token_value = tokens[str(token_name)]
         return token_value
-    except:
+    except Exception as e:
+        print('Exception: ' + str(e))
         return None
 
 
