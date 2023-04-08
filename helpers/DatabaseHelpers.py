@@ -47,6 +47,11 @@ def tick_tokens(chat_id, tokens: int):
     chat.tokens_used += tokens
     chat.save()
 
+def assign_last_conversation(chat_id, conversation):
+    chat = Chat.objects.get(chat_id=chat_id)
+    chat.last_conversation = conversation
+    chat.save()
+
 
 async_get_chat = sync_to_async(get_chat)
 async_get_creator = sync_to_async(get_creator)
@@ -54,3 +59,4 @@ async_set_language = sync_to_async(set_language)
 async_set_approved = sync_to_async(set_approved)
 async_tick_counter = sync_to_async(tick_counter)
 async_tick_tokens = sync_to_async(tick_tokens)
+async_assign_last_conversation = sync_to_async(assign_last_conversation)
