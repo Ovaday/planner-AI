@@ -9,3 +9,8 @@ python-decouple
 python-telegram-bot
 cryptography
 aws-secretsmanager-caching
+django-q
+boto3
+django-picklefield
+arrow
+blessed
