@@ -141,3 +141,20 @@ else:
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+Q_CLUSTER = {
+    'name': 'django-sqs-dev',
+    'workers': 4,
+    'timeout': 60,
+    'retry': 90,
+    'queue_limit': 100,
+    'attempt_count': 1,
+    'ack_failures': True,
+    'bulk': 5,
+    'sqs': {
+        'aws_region': get_token("AWS_REGION"),  # optional
+        'aws_access_key_id': get_token("IAM_ACCESS_KEY"),  # optional
+        'aws_secret_access_key': get_token("IAM_SECRET_KEY"),  # optional
+        'receive_message_wait_time_seconds': 20
+    }
+}
