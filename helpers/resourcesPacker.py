@@ -75,7 +75,7 @@ def unpack_resources():
     key = get_fernet_key()
     files = listFiles(basedir_packed, True)
     for filename in files:
-        decrypt(basedir_packed + filename, basedir_extracted + filename, key)
+        decrypt(filename, basedir_extracted + filename, key)
 
 def pack_resources():
     print(basedir_extracted)
