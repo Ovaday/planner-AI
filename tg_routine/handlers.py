@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import io
 
 import httpx
 from asgiref.sync import async_to_sync, sync_to_async
@@ -15,9 +16,11 @@ from cryptography.fernet import Fernet
 from helpers.openAIHelper import chatGPT_req, chatGPT_req_test
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label, get_day
+from open_ai.requestsHandler import voice_to_text
 from tg_routine.serviceHelpers import check_is_chat_approved
 from tg_routine.templates import fill_classification_request, fill_reminder_template, fill_reminder_advice_request, \
     fill_advanced_classification_request
+import soundfile as sf
 
 
 async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -50,16 +53,11 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
 
 async def timeout(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message = update.message
-    chat_id = update.effective_chat.id
-    chat = await async_get_chat(chat_id)
+    message, chat_id, chat = await resolve_main_params(update)
     await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('timeout', chat.language))
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message = update.message
-    chat_id = update.effective_chat.id
-
-    chat = await async_get_chat(chat_id)
+    message, chat_id, chat = await resolve_main_params(update)
     creator = await async_get_creator()
 
     await context.bot.send_message(chat_id=chat_id, text=f"""
@@ -101,11 +99,7 @@ async def lambda_call(event):
     return JsonResponse({"ok": "POST request processed"})
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message = update.message
-    print(message)
-    chat_id = update.effective_chat.id
-
-    chat = await async_get_chat(chat_id)
+    message, chat_id, chat = await resolve_main_params(update)
     if not chat:
         print('no chat')
         return await start(update, context)
@@ -128,16 +122,40 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 # return await lambda_call_wrapper(update.to_json())
                 async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
 
+async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message, chat_id, chat = await resolve_main_params(update)
+
+    if not chat:
+        print('no chat')
+        return await start(update, context)
+    if not await check_is_chat_approved(chat, context, message):
+        return
+
+    else:
+        voice_message = await context.bot.get_file(update.message.voice.file_id)
+        voice_file = io.BytesIO()
+        await voice_message.download_to_memory(voice_file)
+        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                       text=f'File received.')
+        voice_file.seek(0)
+        voice_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.ogg'
+
+        data, samplerate = sf.read(voice_file)
+        mem_file = io.BytesIO()
+        sf.write(mem_file, data, samplerate, 'PCM_16', format='wav')
+        mem_file.seek(0)
+        duration = sf.info(mem_file).duration
+        mem_file.seek(0)
+        mem_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.wav'
+        recognized_text = await voice_to_text(chat, mem_file, duration)
+        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                       text=f'Recognized: {recognized_text}')
 
 
 async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print('chapt_gpt_message')
-    message = update.message
+    message, chat_id, chat = await resolve_main_params(update)
     original_request = message.text.replace('\'', '').replace('\"', '')
-    print(message)
-    chat_id = update.effective_chat.id
-
-    chat = await async_get_chat(chat_id)
     if not chat:
         print('no chat')
         return await start(update, context)
@@ -263,6 +281,7 @@ def define_needs_reminder(prob, json_classif):
     else:
         return False
 
+
 def define_probably_needs_reminder(prob, json_classif):
     if json_classif["is_event"] == "true":
         return json_classif["is_question"] == "true"
@@ -273,5 +292,15 @@ def define_probably_needs_reminder(prob, json_classif):
     else:
         return False
 
+
 def define_needs_save(prob, json_classif):
     return json_classif["is_save_request"] == "true"
+
+
+async def resolve_main_params(update: Update):
+    message = update.message
+    print(message)
+    chat_id = update.effective_chat.id
+
+    chat = await async_get_chat(chat_id)
+    return message, chat_id, chat

@@ -3,7 +3,7 @@ import re
 
 import openai
 
-from helpers.DatabaseHelpers import async_tick_tokens
+from helpers.DatabaseHelpers import async_tick_expenses
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label
 from typing import Literal
@@ -15,6 +15,8 @@ _TYPES = Literal[
     'reminder_time',
     'advanced_classification_request'
 ]
+
+
 async def chatGPT_req_test(message, tg_chat, type, model='gpt-3.5-turbo', initial_text=''):
     print(message)
     print(tg_chat)
@@ -79,7 +81,7 @@ async def chatGPT_req(message, tg_chat, type: _TYPES, model='gpt-3.5-turbo', ini
         ]
     )
 
-    await async_tick_tokens(tg_chat.chat_id, chatgpt_response.usage.total_tokens)
+    await async_tick_expenses(tg_chat.chat_id, chatgpt_response.usage.total_tokens, model)
     return parse_response(chatgpt_response, tg_chat, words_limit, type, initial_text)
 
 
