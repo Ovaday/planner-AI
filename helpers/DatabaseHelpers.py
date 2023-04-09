@@ -56,7 +56,7 @@ def tick_tokens(chat_id, tokens: int):
 def tick_expenses(chat_id, tokens, model: str, is_classification=False):
     chat = Chat.objects.get(chat_id=chat_id)
 
-    if "whisper-1" in model:
+    if "whisper" in model:
         chat.expenses += 0.006 * tokens / 60
     elif "ada" in model:
         if is_classification:
