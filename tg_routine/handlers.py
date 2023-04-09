@@ -123,6 +123,34 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 # return await lambda_call_wrapper(update.to_json())
                 async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
 
+async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message, chat_id, chat = await resolve_main_params(update)
+
+    if not chat:
+        print('no chat')
+        return await start(update, context)
+    if not await check_is_chat_approved(chat, context, message):
+        return
+
+    else:
+        voice_message = await context.bot.get_file(update.message.voice.file_id)
+        voice_file = io.BytesIO()
+        await voice_message.download_to_memory(voice_file)
+        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                       text=f'File received.')
+        voice_file.seek(0)
+        voice_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.ogg'
+
+        data, samplerate = sf.read(voice_file)
+        mem_file = io.BytesIO()
+        sf.write(mem_file, data, samplerate, 'PCM_16', format='wav')
+        mem_file.seek(0)
+        duration = sf.info(mem_file).duration
+        mem_file.seek(0)
+        mem_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.wav'
+        recognized_text = await voice_to_text(chat, mem_file, duration)
+        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                       text=f'Recognized: {recognized_text}')
 
 async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message, chat_id, chat = await resolve_main_params(update)
