@@ -13,6 +13,7 @@ from helpers.DatabaseHelpers import async_set_language, async_get_chat, async_ge
     async_tick_counter, async_assign_last_conversation
 from cryptography.fernet import Fernet
 
+from helpers.localClassifiers import predict_class
 from helpers.openAIHelper import chatGPT_req
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label, get_day
@@ -204,23 +205,26 @@ async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     else:
         results = await asyncio.gather(get_reminder_probability(chat, message),
-                                       classify(chat, message))
+                                       classify(chat, message),
+                                       predict_class(message))
         print('asyncio.gather executed')
         print(results)
         reminder_probability = results[0]
-        advanced_reminder_probability = results[1]
-        await context.bot.send_message(chat_id=chat_id, text=reminder_probability)
-        await context.bot.send_message(chat_id=chat_id, text=advanced_reminder_probability)
+        openai_classification = results[1]
+        local_classification = results[2]
+        await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
+        await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
+        await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
-        if define_needs_reminder(reminder_probability, advanced_reminder_probability):
+        if define_needs_reminder(reminder_probability, openai_classification):
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
             await context.bot.send_message(chat_id=chat_id, text='set_reminder')
-        elif define_sets_goal(reminder_probability, advanced_reminder_probability):
+        elif define_sets_goal(reminder_probability, openai_classification):
             await context.bot.send_message(chat_id=chat_id, text='set_goal')
-        elif define_probably_needs_reminder(reminder_probability, advanced_reminder_probability):
+        elif define_probably_needs_reminder(reminder_probability, openai_classification):
             await context.bot.send_message(chat_id=chat_id, text='set_reminder_and_answer')
             # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
-        elif define_needs_save(reminder_probability, advanced_reminder_probability):
+        elif define_needs_save(reminder_probability, openai_classification):
             await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         else:
             # await ask_chatGPT(message, chat, chat_id, context)
@@ -340,7 +344,7 @@ def bool_val(data, param):
 def define_needs_reminder(prob, json_classif):
     if json_classif["is_reminder"]:
         return True
-    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == MID_PROB and prob == HIGH_PROB):
+    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == MID_PROB or prob == HIGH_PROB):
         return True
     if (json_classif["is_intention"] or json_classif["is_goal"]):
         return False
@@ -355,6 +359,7 @@ def define_sets_goal(prob, json_classif):
         return True
 
     return False
+
 
 def define_probably_needs_reminder(prob, json_classif):
     if json_classif["is_save"] or json_classif["is_reminder"]:
