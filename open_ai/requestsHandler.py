@@ -5,7 +5,7 @@ from helpers.tokenHelpers import get_token
 from open_ai.helpers import fill_classification_template, define_probability
 
 
-async def classify(tg_chat, message: str):
+async def classify(tg_chat, message):
     openai.api_key = get_token('OPENAI_API')
     ft_classification_model = get_token('FT_CL_MODEL')
 
@@ -16,7 +16,7 @@ async def classify(tg_chat, message: str):
     return fill_classification_template(classifier)
 
 
-async def reminder_probability(tg_chat, message: str):
+async def get_reminder_probability(tg_chat, message):
     openai.api_key = get_token('OPENAI_API')
     ft_reminder_probability_model = get_token('FT_REM_MODEL')
 
