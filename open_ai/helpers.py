@@ -10,7 +10,7 @@ GPT_request_classification_template = {
 }
 
 
-def fill_classif_template(response: str):
+def fill_classification_template(response: str):
     template = GPT_request_classification_template.copy()
     template[define_class(response)] = True
     return template
