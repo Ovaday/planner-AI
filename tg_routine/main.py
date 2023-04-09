@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from helpers.tokenHelpers import get_token
 from tg_routine.commandHandlers import *
-from tg_routine.handlers import start, echo, button, timeout, chapt_gpt_message
+from tg_routine.handlers import start, echo, button, timeout, chapt_gpt_message, audio
 from tg_routine.templates import fill_template
 import traceback
 application = Application.builder().token(get_token('TG_BOT_TOKEN')).build()
@@ -24,6 +24,9 @@ async def main(event):
         message_specific_handler = CommandHandler(['message_specific'], message_specific)
         application.add_handler(timeout_handler)
         application.add_handler(message_specific_handler)
+
+        audio_handler = MessageHandler(filters.VOICE, audio)
+        application.add_handler(audio_handler)
 
         echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
         application.add_handler(echo_handler)
