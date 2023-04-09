@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from helpers.tokenHelpers import get_token
 from tg_routine.commandHandlers import *
-from tg_routine.handlers import start, echo, button, timeout, chapt_gpt_message, audio
+from tg_routine.handlers import start, echo, button, timeout, chapt_gpt_message, audio, audio_aws
 from tg_routine.templates import fill_template
 import traceback
 application = Application.builder().token(get_token('TG_BOT_TOKEN')).build()
@@ -59,6 +59,9 @@ async def main_qcluster(event):
         chapt_gpt_message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), chapt_gpt_message)
         print('chapt_gpt_message_handler')
         application.add_handler(chapt_gpt_message_handler)
+
+        audio_handler = MessageHandler(filters.VOICE, audio_aws)
+        application.add_handler(audio_handler)
 
         update = Update.de_json(event, application.bot)
         print(update)

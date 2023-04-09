@@ -4,9 +4,8 @@ import io
 import json
 
 import httpx
-from asgiref.sync import async_to_sync, sync_to_async
 from django.http import JsonResponse
-from django_q.tasks import async_task, result_group, delete_group
+from django_q.tasks import async_task
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
@@ -14,13 +13,14 @@ from helpers.DatabaseHelpers import async_set_language, async_get_chat, async_ge
     async_tick_counter, async_assign_last_conversation
 from cryptography.fernet import Fernet
 
-from helpers.openAIHelper import chatGPT_req, chatGPT_req_test
+from helpers.localClassifiers import predict_class
+from helpers.openAIHelper import chatGPT_req
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label, get_day
-from open_ai.requestsHandler import voice_to_text
+from open_ai.requestsHandler import voice_to_text, classify, get_reminder_probability
+from open_ai.helpers import HIGH_PROB, MID_PROB, LOW_PROB
 from tg_routine.serviceHelpers import check_is_chat_approved
-from tg_routine.templates import fill_classification_request, fill_reminder_template, fill_reminder_advice_request, \
-    fill_advanced_classification_request
+from tg_routine.templates import fill_reminder_template, fill_reminder_advice_request
 import soundfile as sf
 
 
@@ -46,16 +46,20 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_markup = ReplyKeyboardMarkup(
                 reply_keyboard, one_time_keyboard=True, input_field_placeholder="ChatGPT"
             )
-            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_approved', chat.language), reply_markup=reply_markup)
+            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_approved', chat.language),
+                                           reply_markup=reply_markup)
         else:
             await async_set_approved(chat.chat_id, False)
             await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language))
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
 
+
 async def timeout(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message, chat_id, chat = await resolve_main_params(update)
-    await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('timeout', chat.language))
+    await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                   text=get_label('timeout', chat.language))
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message, chat_id, chat = await resolve_main_params(update)
@@ -84,20 +88,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup)
 
+
 async def lambda_call_wrapper(event):
     asyncio.ensure_future(lambda_call(event))
     await asyncio.sleep(1)
     return JsonResponse({"ok": "POST request processed"})
 
+
 async def lambda_call(event):
     key = bytes(str(get_token('COMMON_KEY')), 'utf-8')
     fernet = Fernet(key)
-    encMessage = fernet.encrypt(bytes(event,'utf-8'))
+    encMessage = fernet.encrypt(bytes(event, 'utf-8'))
     gateway_url = get_token('GATEWAY_URL')
     async with httpx.AsyncClient() as client:
-        response = await client.post(gateway_url, data={'data': encMessage.decode("utf-8") })
+        response = await client.post(gateway_url, data={'data': encMessage.decode("utf-8")})
 
     return JsonResponse({"ok": "POST request processed"})
+
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message, chat_id, chat = await resolve_main_params(update)
@@ -110,47 +117,21 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         if message.text == 'ChatGPT':
             reply_markup = ReplyKeyboardRemove()
-            await context.bot.send_message(chat_id=chat_id, text=get_label('chat_gpt_intro', chat.language), reply_markup=reply_markup)
+            await context.bot.send_message(chat_id=chat_id, text=get_label('chat_gpt_intro', chat.language),
+                                           reply_markup=reply_markup)
         else:
             await async_tick_counter(chat_id)
             if len(message.text) > 500:
-                await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('too_long_msg', chat.language))
+                await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                               text=get_label('too_long_msg', chat.language))
             elif len(message.text) < 5:
-                await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id, text=get_label('too_short_msg', chat.language))
+                await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                               text=get_label('too_short_msg', chat.language))
             else:
                 await async_assign_last_conversation(chat_id, message.text)
-                print('Invoke Lambda Function')
-                # return await lambda_call_wrapper(update.to_json())
+                print('Invoke AWS')
                 async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
 
-async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message, chat_id, chat = await resolve_main_params(update)
-
-    if not chat:
-        print('no chat')
-        return await start(update, context)
-    if not await check_is_chat_approved(chat, context, message):
-        return
-
-    else:
-        voice_message = await context.bot.get_file(update.message.voice.file_id)
-        voice_file = io.BytesIO()
-        await voice_message.download_to_memory(voice_file)
-        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
-                                       text=f'File received.')
-        voice_file.seek(0)
-        voice_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.ogg'
-
-        data, samplerate = sf.read(voice_file)
-        mem_file = io.BytesIO()
-        sf.write(mem_file, data, samplerate, 'PCM_16', format='wav')
-        mem_file.seek(0)
-        duration = sf.info(mem_file).duration
-        mem_file.seek(0)
-        mem_file.name = f'voice_{update.message.chat_id}_{update.message.message_id}.wav'
-        recognized_text = await voice_to_text(chat, mem_file, duration)
-        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
-                                       text=f'Recognized: {recognized_text}')
 
 async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message, chat_id, chat = await resolve_main_params(update)
@@ -162,16 +143,28 @@ async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     else:
-        mem_file, duration = await process_voice_message(update, context)
-        recognized_text = await voice_to_text(chat, mem_file, duration)
-        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
-                                       text=f"""{get_label('recognized', chat.language)}: {recognized_text}
+        print('process_voice_message')
+        async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
+
+
+async def audio_aws(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message, chat_id, chat = await resolve_main_params(update)
+
+    print('process_voice_message')
+    mem_file, duration = await process_voice_message(update, context)
+    print('processed_voice_message')
+    recognized_text = await voice_to_text(chat, mem_file, duration)
+    print('recognized_text')
+    await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
+                                    text=f"""{get_label('recognized', chat.language)}: {recognized_text}
+
 {get_label('processing_wait', chat.language)}""")
 
-        json_update = json.loads(update.to_json())
-        json_update = audio_json_to_text(json_update, recognized_text)
-        async_task('helpers.SQSHelpers.task_receiver', json_update, kwargs={})
-
+    json_update = json.loads(update.to_json())
+    json_update = audio_json_to_text(json_update, recognized_text)
+    print('audio_json_to_text')
+    new_update = Update.de_json(json_update, context)
+    await chapt_gpt_message(new_update, context)
 
 def audio_json_to_text(json_update, recognized_text):
     del json_update['message']['voice']
@@ -211,24 +204,31 @@ async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     else:
-        results = await asyncio.gather(chatGPT_req(fill_classification_request(message.text), chat,
-                                                 type='reminder_classification'), chatGPT_req(fill_advanced_classification_request(message.text), chat,
-                                                 type='advanced_classification_request'))
+        results = await asyncio.gather(get_reminder_probability(chat, message),
+                                       classify(chat, message),
+                                       predict_class(message))
         print('asyncio.gather executed')
         print(results)
         reminder_probability = results[0]
-        advanced_reminder_probability = results[1]
-        await context.bot.send_message(chat_id=chat_id, text=reminder_probability)
-        await context.bot.send_message(chat_id=chat_id, text=advanced_reminder_probability)
+        openai_classification = results[1]
+        local_classification = results[2]
+        await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
+        await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
+        await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
-        if define_needs_reminder(reminder_probability, advanced_reminder_probability):
-            await set_reminder(message, chat, chat_id, context, reminder_probability)
-        elif define_probably_needs_reminder(reminder_probability, advanced_reminder_probability):
-            await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
-        elif define_needs_save(reminder_probability, advanced_reminder_probability):
+        if define_needs_reminder(reminder_probability, openai_classification):
+            # await set_reminder(message, chat, chat_id, context, reminder_probability)
+            await context.bot.send_message(chat_id=chat_id, text='set_reminder')
+        elif define_sets_goal(reminder_probability, openai_classification):
+            await context.bot.send_message(chat_id=chat_id, text='set_goal')
+        elif define_probably_needs_reminder(reminder_probability, openai_classification):
+            await context.bot.send_message(chat_id=chat_id, text='set_reminder_and_answer')
+            # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
+        elif define_needs_save(reminder_probability, openai_classification):
             await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         else:
-            await ask_chatGPT(message, chat, chat_id, context)
+            # await ask_chatGPT(message, chat, chat_id, context)
+            await context.bot.send_message(chat_id=chat_id, text='ask_chatGPT')
 
 
 async def ask_chatGPT(message, chat, chat_id, context):
@@ -237,8 +237,9 @@ async def ask_chatGPT(message, chat, chat_id, context):
 
 
 async def set_reminder(message, chat, chat_id, context, prob):
-    results = await asyncio.gather(chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
-                                   chatGPT_req(fill_reminder_advice_request(message.text, chat.language), chat, type='advice_for_reminder'))
+    results = await asyncio.gather(
+        chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
+        chatGPT_req(fill_reminder_advice_request(message.text, chat.language), chat, type='advice_for_reminder'))
     print(' set_reminder asyncio.gather executed')
     print(results)
     reminder_time = results[0]
@@ -249,8 +250,9 @@ async def set_reminder(message, chat, chat_id, context, prob):
 
 
 async def set_reminder_and_answer(message, chat, chat_id, context, prob):
-    results = await asyncio.gather(chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
-                                   chatGPT_req(message.text, chat, type='normal'))
+    results = await asyncio.gather(
+        chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
+        chatGPT_req(message.text, chat, type='normal'))
     print(' set_reminder_and_answer asyncio.gather executed')
     print(results)
     reminder_time = results[0]
@@ -272,7 +274,8 @@ async def sent_reminder(reminder_time, additional_info, message, chat, chat_id, 
 
 
 def define_text_parameter(data, param_name, param_min_length=0):
-    return param_name in data and len(data[param_name]) > param_min_length and (not 'YYYY-MM-DD HH:MM' in data[param_name] or param_name == 'planned_event_start')
+    return param_name in data and len(data[param_name]) > param_min_length and (
+                not 'YYYY-MM-DD HH:MM' in data[param_name] or param_name == 'planned_event_start')
 
 
 def get_time(data, param_name, language):
@@ -289,7 +292,8 @@ def get_time(data, param_name, language):
 
 async def resolve_is_defined_time_of_event(reminder_time, chat, chat_id, context, message, prob, is_answer=False):
     if 'is_defined_time_of_event' in reminder_time and bool(
-            reminder_time['is_defined_time_of_event']) and define_text_parameter(reminder_time, 'planned_event_start', 5):
+            reminder_time['is_defined_time_of_event']) and define_text_parameter(reminder_time, 'planned_event_start',
+                                                                                 5):
         additional_text = ''
         if is_answer:
             additional_text = f" {get_label('additional_answer_chat_gpt', chat.language)}."
@@ -318,7 +322,8 @@ def get_reminder_inline_keyboard(chat):
 
 
 def get_reminder_decline_inline_keyboard(chat):
-    keyboard = [[InlineKeyboardButton(get_label('decline_reminders_ask', chat.language), callback_data=f'decline_reminders_ask_{chat.chat_id}')]]
+    keyboard = [[InlineKeyboardButton(get_label('decline_reminders_ask', chat.language),
+                                      callback_data=f'decline_reminders_ask_{chat.chat_id}')]]
     return InlineKeyboardMarkup(keyboard)
 
 
@@ -326,33 +331,51 @@ def bool_val(data, param):
     return param in data and bool(data[param])
 
 
-#{"is_event": "true", "is_question": "false", "is_appointment": "false", "is_intention": "false", "is_reminder_request": "false", "is_save_request": "false", "none_of_the_above": "false"}
+"""{
+    'is_event': False,
+    'is_chat': False,
+    'is_appointment': False,
+    'is_intention': False,
+    'is_reminder': False,
+    'is_save': False,
+    'is_calender': False,
+    'is_goal': False
+}"""
 def define_needs_reminder(prob, json_classif):
-    if json_classif["is_event"] == "true":
-        return json_classif["is_appointment"] == "true" or json_classif["is_reminder_request"] == "true" or prob > 7
-    elif json_classif["is_question"] == "true":
-        return prob >= 7 and json_classif["is_reminder_request"] == "true"
-    elif json_classif["is_reminder_request"] == "true":
+    if json_classif["is_reminder"]:
         return True
-    elif json_classif["none_of_the_above"] == "true":
-        return json_classif["is_intention"] == "true" and json_classif["is_reminder_request"] == "true"
-    else:
+    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == MID_PROB or prob == HIGH_PROB):
+        return True
+    if (json_classif["is_intention"] or json_classif["is_goal"]):
         return False
+    if json_classif["is_chat"] or json_classif["is_save"]:
+        return False
+
+    return False
+
+
+def define_sets_goal(prob, json_classif):
+    if (json_classif["is_intention"] or json_classif["is_goal"]):
+        return True
+
+    return False
 
 
 def define_probably_needs_reminder(prob, json_classif):
-    if json_classif["is_event"] == "true":
-        return json_classif["is_question"] == "true"
-    elif json_classif["is_intention"] == "true" and prob > 7:
-        return True
-    elif len(json_classif) < 1 and prob > 6:
-        return True
-    else:
+    if json_classif["is_save"] or json_classif["is_reminder"]:
         return False
+    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == LOW_PROB):
+        return True
+    if json_classif["is_chat"] and (prob == HIGH_PROB):
+        return True
+    if (json_classif["is_intention"] or json_classif["is_goal"]) and (prob == MID_PROB or prob == HIGH_PROB):
+        return True
+
+    return False
 
 
 def define_needs_save(prob, json_classif):
-    return json_classif["is_save_request"] == "true"
+    return json_classif["is_save"]
 
 
 async def resolve_main_params(update: Update):

@@ -9,6 +9,10 @@ GPT_request_classification_template = {
     'is_goal': False
 }
 
+HIGH_PROB = 'high'
+MID_PROB = 'mid'
+LOW_PROB = 'low'
+
 
 def fill_classification_template(response: str):
     template = GPT_request_classification_template.copy()
@@ -18,14 +22,14 @@ def fill_classification_template(response: str):
 
 def define_probability(response: str):
     if len(response) < 3:
-        return 'low'
+        return LOW_PROB
 
     if 'high' in response:
-        return 'high'
+        return HIGH_PROB
     elif 'mid' in response:
-        return 'mid'
+        return MID_PROB
     else:
-        return 'low'
+        return LOW_PROB
 
 
 def define_class(response: str):
