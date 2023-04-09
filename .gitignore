@@ -19,3 +19,4 @@ virt_env/
 resources/extracted/
 *-checkpoint.ipynb
 .ipynb_checkpoints/
+personal/
