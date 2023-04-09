@@ -16,6 +16,18 @@ def fill_classif_template(response: str):
     return template
 
 
+def define_probability(response: str):
+    if len(response) < 3:
+        return 'low'
+
+    if 'high' in response:
+        return 'high'
+    elif 'mid' in response:
+        return 'mid'
+    else:
+        return 'low'
+
+
 def define_class(response: str):
     if len(response) < 3:
         return 'is_chat'
