@@ -17,10 +17,10 @@ def listFiles(resourcesPath, is_encrypt):
     if is_encrypt:
         # Return only files with the ".enc" extension
         return [f for f in listdir(resourcesPath) if
-                isfile(join(resourcesPath, f)) and f.endswith(".enc") and f != 'resourcesPacker.ipynb']
+                isfile(join(resourcesPath, f)) and f.endswith(".enc") and not f.endswith(".ipynb")]
     else:
         # Return all files except 'resourcesPacker.ipynb'
-        return [f for f in listdir(resourcesPath) if isfile(join(resourcesPath, f)) and f != 'resourcesPacker.ipynb']
+        return [f for f in listdir(resourcesPath) if isfile(join(resourcesPath, f)) and not f.endswith(".py") and not f.endswith(".ipynb")]
 
 
 def handleExtension(filename, is_encrypt):
