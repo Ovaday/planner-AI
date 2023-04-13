@@ -120,6 +120,31 @@ The current functionality of the commands:
         {
             'russian': 'Удалить',
             'english': 'Delete'},
+    'reminder_request_type':
+        {
+            'russian': 'напоминания',
+            'english': 'a reminder'},
+    'goal_request_type':
+        {
+            'russian': 'цели',
+            'english': 'a goal'},
+    'appointment_request_type':
+        {
+            'russian': 'события',
+            'english': 'an appointment/event'},
+    'save_request_type':
+        {
+            'russian': 'чего-либо',
+            'english': 'a save'},
+    'not_released_functionality_request':
+        {
+            'russian': """Похоже, что вы отправили запрос на добавление/сохранение {request_type}. Прямо сейчас мы не \
+поддерживаем такой тип функциональности, но планируем добавить его. ChatGPT ответит на ваше сообщение. Пожалуйста, \
+сообщите нам, если это была ошибка. Это улучшит работу бота в ваших будущих запросах.""",
+            'english': """It seems that you have send {request_type} request. Right now we \
+don't support that type of functionality, but we plan to. ChatGPT will answer to your message. Please, notify us if \
+that was an error. That will improve the bot in your future requests."""
+        },
     'decline_reminders_ask':
         {
             'russian': 'Отменить уведомления и спросить ChatGPT напрямую',
@@ -163,7 +188,12 @@ _TYPES = Literal[
     'analyze_request_requirement',
     'event_identified',
     'recognized',
-    'processing_wait'
+    'processing_wait',
+    'not_released_functionality_request',
+    'reminder_request_type',
+    'goal_request_type',
+    'appointment_request_type',
+    'save_request_type'
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']

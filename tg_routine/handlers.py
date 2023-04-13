@@ -218,23 +218,26 @@ async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
         await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
-        not_released_functionality_request = """It seems that you have send a {request_type} request. Right now we \
-don't support that type of functionality, but we plan to. ChatGPT will answer to your message. Please, notify us if \
-that was an error. That will improve the bot in your future requests."""
+        not_released_functionality_request = get_label('not_released_functionality_request', chat.language)
+
         # ToDo: There should be an error button
         if define_needs_reminder(reminder_probability, classification_used):
+            request_type_label = get_label('reminder_request_type', chat.language)
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
-            msg = not_released_functionality_request.format(request_type='reminder')
+            msg = not_released_functionality_request.format(request_type=request_type_label)
             await context.bot.send_message(chat_id=chat_id, text=msg)
         elif define_sets_goal(reminder_probability, classification_used):
-            msg = not_released_functionality_request.format(request_type='goal')
+            request_type_label = get_label('goal_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
             await context.bot.send_message(chat_id=chat_id, text=msg)
         elif define_probably_needs_reminder(reminder_probability, classification_used):
-            msg = not_released_functionality_request.format(request_type='appointment')
+            request_type_label = get_label('appointment_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
             await context.bot.send_message(chat_id=chat_id, text=msg)
             # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
         elif define_needs_save(reminder_probability, classification_used):
-            msg = not_released_functionality_request.format(request_type='save')
+            request_type_label = get_label('save_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
             await context.bot.send_message(chat_id=chat_id, text=msg)
             # await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         else:
