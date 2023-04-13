@@ -218,16 +218,25 @@ async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
         await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
+        not_released_functionality_request = """It seems that you have send a {request_type} request. Right now we \
+don't support that type of functionality, but we plan to. ChatGPT will answer to your message. Please, notify us if \
+that was an error. That will improve the bot in your future requests."""
+        # ToDo: There should be an error button
         if define_needs_reminder(reminder_probability, classification_used):
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
-            await context.bot.send_message(chat_id=chat_id, text='set_reminder')
+            msg = not_released_functionality_request.format(request_type='reminder')
+            await context.bot.send_message(chat_id=chat_id, text=msg)
         elif define_sets_goal(reminder_probability, classification_used):
-            await context.bot.send_message(chat_id=chat_id, text='set_goal')
+            msg = not_released_functionality_request.format(request_type='goal')
+            await context.bot.send_message(chat_id=chat_id, text=msg)
         elif define_probably_needs_reminder(reminder_probability, classification_used):
-            await context.bot.send_message(chat_id=chat_id, text='set_reminder_and_answer')
+            msg = not_released_functionality_request.format(request_type='appointment')
+            await context.bot.send_message(chat_id=chat_id, text=msg)
             # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
         elif define_needs_save(reminder_probability, classification_used):
-            await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
+            msg = not_released_functionality_request.format(request_type='save')
+            await context.bot.send_message(chat_id=chat_id, text=msg)
+            # await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         else:
             # await ask_chatGPT(message, chat, chat_id, context)
             await context.bot.send_message(chat_id=chat_id, text='ask_chatGPT')

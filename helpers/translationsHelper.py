@@ -35,8 +35,9 @@ labels = {
         {'russian': 'Сообщение обрезано.',
          'english': 'Response message is cut.'},
     'timeout':
-        {'russian': 'Запрос не был обработан из-за слишком долгого времени обработки. Попробуйте сократить запрос или попробовать позже.',
-         'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
+        {
+            'russian': 'Запрос не был обработан из-за слишком долгого времени обработки. Попробуйте сократить запрос или попробовать позже.',
+            'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
     'help':
         {'russian':
              """Данный чат-бот призван улучшить жизнь, оптимизируя все необходимое для организации эффективного планирования и работы в одном месте. Для своей работы бот использует передовые технологии, нейронные сети с ChatGPT и распознавание голоса (в будущем).
@@ -68,8 +69,9 @@ The current functionality of the commands:
         {'russian': 'Проанализируй следующий запрос пользователя, для которого установлено напоминание',
          'english': 'Analyze the following users request for which the reminder is set'},
     'analyze_request_requirement':
-        {'russian': 'На основе этого составьте очень короткий совет, который будет отправлен пользователю при установке уведомления. Не нужно писать что нужно поставить напоминание или уведомление. Напишите его на русском языке. Используйте не более 100 слов, чтобы рассказать пользователю, как он может преуспеть в этом.',
-         'english': 'Based on that provide very short advice that will be sent to the user. Use max 100 words to tell user how he can succeed in that.'},
+        {
+            'russian': 'На основе этого составьте очень короткий совет, который будет отправлен пользователю при установке уведомления. Не нужно писать что нужно поставить напоминание или уведомление. Напишите его на русском языке. Используйте не более 100 слов, чтобы рассказать пользователю, как он может преуспеть в этом.',
+            'english': 'Based on that provide very short advice that will be sent to the user. Use max 100 words to tell user how he can succeed in that.'},
     'event_identified':
         {
             'russian': 'Я определил это как событие, которое произойдет',
@@ -129,7 +131,6 @@ The current functionality of the commands:
 
 }
 
-
 _TYPES = Literal[
     'ask_to_save',
     'additional_answer_chat_gpt',
@@ -167,8 +168,10 @@ _TYPES = Literal[
 
 _LANGUAGE_TYPES = Literal['english', 'russian']
 
+
 def get_label(name: _TYPES, language: _LANGUAGE_TYPES):
     return labels.get(name).get(language)
+
 
 week_labels = {
     'Monday':
@@ -201,6 +204,7 @@ week_labels = {
 
 }
 
+
 def get_day(datetime, language):
     day_index = datetime.weekday()
     day_name = DAYS[day_index]
@@ -210,11 +214,15 @@ def get_day(datetime, language):
         day_name = 'Tomorrow'
     return week_labels.get(day_name).get(language)
 
+
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+
 def get_current_day():
     now = datetime.datetime.now()
     day_index = now.weekday()
     return DAYS[day_index]
+
 
 def get_tomorrow_day():
     now = datetime.datetime.now()
