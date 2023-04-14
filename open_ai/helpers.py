@@ -5,7 +5,6 @@ GPT_request_classification_template = {
     'is_intention': False,
     'is_reminder': False,
     'is_save': False,
-    'is_calender': False,
     'is_goal': False
 }
 
@@ -36,9 +35,7 @@ def define_class(response: str):
     if len(response) < 3:
         return 'is_chat'
 
-    if 'cal' in response:
-        return 'is_calender'
-    elif 'chat' in response:
+    if 'chat' in response:
         return 'is_chat'
     elif 'goal' in response:
         return 'is_goal'

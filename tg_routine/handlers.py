@@ -156,7 +156,7 @@ async def audio_aws(update: Update, context: ContextTypes.DEFAULT_TYPE):
     recognized_text = await voice_to_text(chat, mem_file, duration)
     print('recognized_text')
     await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
-                                    text=f"""{get_label('recognized', chat.language)}: {recognized_text}
+                                   text=f"""{get_label('recognized', chat.language)}: {recognized_text}
 
 {get_label('processing_wait', chat.language)}""")
 
@@ -165,6 +165,7 @@ async def audio_aws(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print('audio_json_to_text')
     new_update = Update.de_json(json_update, context)
     await chapt_gpt_message(new_update, context)
+
 
 def audio_json_to_text(json_update, recognized_text):
     del json_update['message']['voice']
@@ -212,20 +213,33 @@ async def chapt_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reminder_probability = results[0]
         openai_classification = results[1]
         local_classification = results[2]
+        classification_used = local_classification
         await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
         await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
         await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
-        if define_needs_reminder(reminder_probability, openai_classification):
+        not_released_functionality_request = get_label('not_released_functionality_request', chat.language)
+
+        # ToDo: There should be an error button
+        if define_needs_reminder(reminder_probability, classification_used):
+            request_type_label = get_label('reminder_request_type', chat.language)
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
-            await context.bot.send_message(chat_id=chat_id, text='set_reminder')
-        elif define_sets_goal(reminder_probability, openai_classification):
-            await context.bot.send_message(chat_id=chat_id, text='set_goal')
-        elif define_probably_needs_reminder(reminder_probability, openai_classification):
-            await context.bot.send_message(chat_id=chat_id, text='set_reminder_and_answer')
+            msg = not_released_functionality_request.format(request_type=request_type_label)
+            await context.bot.send_message(chat_id=chat_id, text=msg)
+        elif define_sets_goal(reminder_probability, classification_used):
+            request_type_label = get_label('goal_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
+            await context.bot.send_message(chat_id=chat_id, text=msg)
+        elif define_probably_needs_reminder(reminder_probability, classification_used):
+            request_type_label = get_label('appointment_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
+            await context.bot.send_message(chat_id=chat_id, text=msg)
             # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
-        elif define_needs_save(reminder_probability, openai_classification):
-            await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
+        elif define_needs_save(reminder_probability, classification_used):
+            request_type_label = get_label('save_request_type', chat.language)
+            msg = not_released_functionality_request.format(request_type=request_type_label)
+            await context.bot.send_message(chat_id=chat_id, text=msg)
+            # await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         else:
             # await ask_chatGPT(message, chat, chat_id, context)
             await context.bot.send_message(chat_id=chat_id, text='ask_chatGPT')
@@ -275,7 +289,7 @@ async def sent_reminder(reminder_time, additional_info, message, chat, chat_id, 
 
 def define_text_parameter(data, param_name, param_min_length=0):
     return param_name in data and len(data[param_name]) > param_min_length and (
-                not 'YYYY-MM-DD HH:MM' in data[param_name] or param_name == 'planned_event_start')
+            not 'YYYY-MM-DD HH:MM' in data[param_name] or param_name == 'planned_event_start')
 
 
 def get_time(data, param_name, language):
@@ -338,15 +352,16 @@ def bool_val(data, param):
     'is_intention': False,
     'is_reminder': False,
     'is_save': False,
-    'is_calender': False,
     'is_goal': False
 }"""
+
+
 def define_needs_reminder(prob, json_classif):
     if json_classif["is_reminder"]:
         return True
-    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == MID_PROB or prob == HIGH_PROB):
+    if (json_classif["is_event"] or json_classif["is_appointment"]) and (prob == MID_PROB or prob == HIGH_PROB):
         return True
-    if (json_classif["is_intention"] or json_classif["is_goal"]):
+    if json_classif["is_intention"] or json_classif["is_goal"]:
         return False
     if json_classif["is_chat"] or json_classif["is_save"]:
         return False
@@ -355,7 +370,7 @@ def define_needs_reminder(prob, json_classif):
 
 
 def define_sets_goal(prob, json_classif):
-    if (json_classif["is_intention"] or json_classif["is_goal"]):
+    if json_classif["is_intention"] or json_classif["is_goal"]:
         return True
 
     return False
@@ -364,7 +379,7 @@ def define_sets_goal(prob, json_classif):
 def define_probably_needs_reminder(prob, json_classif):
     if json_classif["is_save"] or json_classif["is_reminder"]:
         return False
-    if (json_classif["is_event"] or json_classif["is_appointment"] or json_classif["is_calender"]) and (prob == LOW_PROB):
+    if (json_classif["is_event"] or json_classif["is_appointment"]) and (prob == LOW_PROB):
         return True
     if json_classif["is_chat"] and (prob == HIGH_PROB):
         return True

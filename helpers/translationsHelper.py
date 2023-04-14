@@ -35,8 +35,9 @@ labels = {
         {'russian': 'Сообщение обрезано.',
          'english': 'Response message is cut.'},
     'timeout':
-        {'russian': 'Запрос не был обработан из-за слишком долгого времени обработки. Попробуйте сократить запрос или попробовать позже.',
-         'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
+        {
+            'russian': 'Запрос не был обработан из-за слишком долгого времени обработки. Попробуйте сократить запрос или попробовать позже.',
+            'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
     'help':
         {'russian':
              """Данный чат-бот призван улучшить жизнь, оптимизируя все необходимое для организации эффективного планирования и работы в одном месте. Для своей работы бот использует передовые технологии, нейронные сети с ChatGPT и распознавание голоса (в будущем).
@@ -68,8 +69,9 @@ The current functionality of the commands:
         {'russian': 'Проанализируй следующий запрос пользователя, для которого установлено напоминание',
          'english': 'Analyze the following users request for which the reminder is set'},
     'analyze_request_requirement':
-        {'russian': 'На основе этого составьте очень короткий совет, который будет отправлен пользователю при установке уведомления. Не нужно писать что нужно поставить напоминание или уведомление. Напишите его на русском языке. Используйте не более 100 слов, чтобы рассказать пользователю, как он может преуспеть в этом.',
-         'english': 'Based on that provide very short advice that will be sent to the user. Use max 100 words to tell user how he can succeed in that.'},
+        {
+            'russian': 'На основе этого составьте очень короткий совет, который будет отправлен пользователю при установке уведомления. Не нужно писать что нужно поставить напоминание или уведомление. Напишите его на русском языке. Используйте не более 100 слов, чтобы рассказать пользователю, как он может преуспеть в этом.',
+            'english': 'Based on that provide very short advice that will be sent to the user. Use max 100 words to tell user how he can succeed in that.'},
     'event_identified':
         {
             'russian': 'Я определил это как событие, которое произойдет',
@@ -118,6 +120,31 @@ The current functionality of the commands:
         {
             'russian': 'Удалить',
             'english': 'Delete'},
+    'reminder_request_type':
+        {
+            'russian': 'напоминания',
+            'english': 'a reminder'},
+    'goal_request_type':
+        {
+            'russian': 'цели',
+            'english': 'a goal'},
+    'appointment_request_type':
+        {
+            'russian': 'события',
+            'english': 'an appointment/event'},
+    'save_request_type':
+        {
+            'russian': 'чего-либо',
+            'english': 'a save'},
+    'not_released_functionality_request':
+        {
+            'russian': """Похоже, что вы отправили запрос на добавление/сохранение {request_type}. Прямо сейчас мы не \
+поддерживаем такой тип функциональности, но планируем добавить его. ChatGPT ответит на ваше сообщение. Пожалуйста, \
+сообщите нам, если это была ошибка. Это улучшит работу бота в ваших будущих запросах.""",
+            'english': """It seems that you have send {request_type} request. Right now we \
+don't support that type of functionality, but we plan to. ChatGPT will answer to your message. Please, notify us if \
+that was an error. That will improve the bot in your future requests."""
+        },
     'decline_reminders_ask':
         {
             'russian': 'Отменить уведомления и спросить ChatGPT напрямую',
@@ -128,7 +155,6 @@ The current functionality of the commands:
             'english': 'It sounds like you asked me to save something for you, however, I cant save things yet. That will be in future updates. For now I can only set reminders or answer your questions.'},
 
 }
-
 
 _TYPES = Literal[
     'ask_to_save',
@@ -162,13 +188,20 @@ _TYPES = Literal[
     'analyze_request_requirement',
     'event_identified',
     'recognized',
-    'processing_wait'
+    'processing_wait',
+    'not_released_functionality_request',
+    'reminder_request_type',
+    'goal_request_type',
+    'appointment_request_type',
+    'save_request_type'
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']
 
+
 def get_label(name: _TYPES, language: _LANGUAGE_TYPES):
     return labels.get(name).get(language)
+
 
 week_labels = {
     'Monday':
@@ -201,6 +234,7 @@ week_labels = {
 
 }
 
+
 def get_day(datetime, language):
     day_index = datetime.weekday()
     day_name = DAYS[day_index]
@@ -210,11 +244,15 @@ def get_day(datetime, language):
         day_name = 'Tomorrow'
     return week_labels.get(day_name).get(language)
 
+
 DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+
 def get_current_day():
     now = datetime.datetime.now()
     day_index = now.weekday()
     return DAYS[day_index]
+
 
 def get_tomorrow_day():
     now = datetime.datetime.now()
