@@ -3,7 +3,7 @@ import os, json
 import urllib3
 
 headers = {"X-Aws-Parameters-Secrets-Token": os.environ.get('AWS_SESSION_TOKEN')}
-success_respons = {
+success_response = {
     'statusCode': 200,
     'headers': {
         'Content-Type': 'application/json',
@@ -48,6 +48,6 @@ def lambda_handler(event, context):
             Parameters={"workingDirectory": [""], "executionTimeout": ["3600"],
                         "commands": [secrets['EC2_DEPLOY_COMMAND']]},
         )
-        return success_respons
+        return success_response
     else:
         return error_response
