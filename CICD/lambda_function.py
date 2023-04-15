@@ -45,7 +45,7 @@ def lambda_handler(event, context):
             DocumentVersion='1',
             TimeoutSeconds=600,
             Comment='string',
-            Parameters={"workingDirectory": [""], "executionTimeout": ["3600"],
+            Parameters={"workingDirectory": ["/home/ubuntu/planner-AI"], "executionTimeout": ["3600"],
                         "commands": [secrets['EC2_DEPLOY_COMMAND']]},
         )
         return success_response
