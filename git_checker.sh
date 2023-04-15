@@ -13,7 +13,7 @@ elif [ $LOCAL = $BASE ]; then
     echo "Need to pull"
     sudo systemctl stop qcluster.service
     git pull
-    pip install -r requirements.txt
+    /home/ubuntu/planner-AI/virt_env/bin/pip install -r requirements.txt
     sudo systemctl start qcluster.service
 elif [ $REMOTE = $BASE ]; then
     echo "Need to push"
