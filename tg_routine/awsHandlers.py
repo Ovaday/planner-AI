@@ -93,9 +93,9 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg = not_released_functionality_request.format(request_type=request_type_label)
             await context.bot.send_message(chat_id=chat_id, text=msg)
             # await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
-        else:
-            # await ask_chatGPT(message, chat, chat_id, context)
-            await context.bot.send_message(chat_id=chat_id, text='ask_chatGPT')
+        #else:
+        await ask_chatGPT(message, chat, chat_id, context)
+        #    await context.bot.send_message(chat_id=chat_id, text='ask_chatGPT')
 
 
 async def ask_chatGPT(message, chat, chat_id, context):

@@ -158,8 +158,6 @@ def define_probably_needs_reminder(prob, json_classif):
         return False
     if (json_classif["is_event"] or json_classif["is_appointment"]) and (prob == LOW_PROB):
         return True
-    if json_classif["is_chat"] and (prob == HIGH_PROB):
-        return True
     if (json_classif["is_intention"] or json_classif["is_goal"]) and (prob == MID_PROB or prob == HIGH_PROB):
         return True
 
