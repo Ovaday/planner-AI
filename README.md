@@ -1,23 +1,14 @@
 # What is Planner-AI
-Planner-Ai is a migration from chat GPT4 to **telegram**-**bot** and **website**. There will be a lot of function which didn't connected to Chat GPT4:
-* Better massage classification
-* Accepting audio massage from user to telegram-bot
-## This is an example
-* **Django + Vercel** 
-  * This example shows how to use Django 4 on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
-*  **Demo**
-   * https://planner-ai.vercel.app/ 
+Planner-AI is a project that implements ChatGPT integration in Telegram via Bots and provides altering functionality on the Website.
+It includes several new functions that were not available on ChatGPT, such as messages classification and accepting audio messages from users.
 
+**Demo**
+* Production: https://planner-ai.vercel.app/ 
+* Development: https://planner-ai-git-mig-ovaday.vercel.app/
 
+## To launch the project locally:
 
-
-## Admin Panel
-
-https://planner-ai.vercel.app/admin/
-
-
-## To launch the project:
-
+**On Windows**
 ```bash
 python -m venv virt_env
 virt_env\Scripts\activate
@@ -25,5 +16,10 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-The last command actually starts the server:
-![img.png](img.png)
+**On Linux**
+```bash
+python -m venv virt_env
+./virt_env/bin/activate
+pip install -r requirements.txt
+python manage.py runserver
+```
