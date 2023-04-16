@@ -48,3 +48,11 @@ def get_db_conn():
         'HOST': get_token("DB_HOST"),
         'PORT': '5432',
     }
+
+
+def get_mongo_db_conn():
+    return {
+        'USER': get_token("MONGO_DB_USER"),
+        'PASSWORD': get_token("MONGO_DB_PASSWORD"),
+        'HOST': get_token("MONGO_DB_ENVIROMENT"),
+    }

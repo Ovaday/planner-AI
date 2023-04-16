@@ -1,6 +1,21 @@
 from asgiref.sync import sync_to_async
 
+from helpers.tokenHelpers import get_mongo_db_conn
 from tg_bot.models import Chat
+from pymongo import MongoClient
+
+
+def get_db_handle(db_name='djangoDB'):
+    DB_DATA = get_mongo_db_conn()
+    mongodb_uri = f"mongodb+srv://{DB_DATA['USER']}:{DB_DATA['PASSWORD']}@{DB_DATA['HOST']}/?retryWrites=true&w=majority"
+
+    client = MongoClient(mongodb_uri)
+    db_handle = client[db_name]
+    return db_handle, client
+
+
+def get_collection_handle(db_handle,collection_name):
+    return db_handle[collection_name]
 
 
 def get_chat(chat_id):
