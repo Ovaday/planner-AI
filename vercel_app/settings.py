@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.eu.ngrok.io', '3.72.87.62', get_token("AWS_HOST")]
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.eu.ngrok.io', '.ngrok-free.app', '3.72.87.62', get_token("AWS_HOST")]
 
 # Application definition
 

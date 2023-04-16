@@ -3,6 +3,7 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes
 
 from helpers.DatabaseHelpers import *
+from helpers.MessageHistoryHelpers import async_get_last_user_messages, async_insert_input_message
 from tg_routine.serviceHelpers import *
 
 
