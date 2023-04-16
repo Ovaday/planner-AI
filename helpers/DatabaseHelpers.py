@@ -5,7 +5,7 @@ from tg_bot.models import Chat
 from pymongo import MongoClient
 
 
-def get_db_handle(db_name='djangoDB'):
+def get_db_handle(db_name='user_data'):
     DB_DATA = get_mongo_db_conn()
     mongodb_uri = f"mongodb+srv://{DB_DATA['USER']}:{DB_DATA['PASSWORD']}@{DB_DATA['HOST']}/?retryWrites=true&w=majority"
 
@@ -14,7 +14,7 @@ def get_db_handle(db_name='djangoDB'):
     return db_handle, client
 
 
-def get_collection_handle(db_handle,collection_name):
+def get_collection_handle(db_handle, collection_name):
     return db_handle[collection_name]
 
 
@@ -39,28 +39,34 @@ def get_chat(chat_id):
         chat = chat.first()
     return chat
 
+
 def get_creator():
     return Chat.objects.get(pk=1)
+
 
 def set_language(chat_id, language):
     chat = Chat.objects.get(chat_id=chat_id)
     chat.language = language
     chat.save()
 
+
 def set_approved(chat_id, option: bool):
     chat = Chat.objects.get(chat_id=chat_id)
     chat.is_approved = option
     chat.save()
+
 
 def tick_counter(chat_id):
     chat = Chat.objects.get(chat_id=chat_id)
     chat.counter += 1
     chat.save()
 
+
 def tick_tokens(chat_id, tokens: int):
     chat = Chat.objects.get(chat_id=chat_id)
     chat.tokens_used += tokens
     chat.save()
+
 
 def assign_last_conversation(chat_id, conversation):
     chat = Chat.objects.get(chat_id=chat_id)
