@@ -85,7 +85,7 @@ async def main_wrapper(event, is_fictious=False):
             return await asyncio.wait_for(main(event), timeout=9.3)
         else:
             # my_event = fill_template('128454636', 'message_specific')
-            return await asyncio.wait_for(main_qcluster(event), timeout=40.3)
+            return await asyncio.wait_for(main_qcluster(event), timeout=200.3)
     except asyncio.TimeoutError:
         my_event = {'update_id': event['update_id'], 'message': {'message_id': event['message']['message_id'],
                                                                  'from': {'id': event['message']['from']['id'],
