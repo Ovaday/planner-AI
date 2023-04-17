@@ -59,7 +59,7 @@ def get_messages(request, *args, **kwargs):
         return error_404_view(request)
 
 
-# ToDo Anastasia: Create endpoint to insert messages. We should receive in kwargs following parameters:
+# ToDo Anastasia: Create endpoint to insert message. We should receive in kwargs following parameters:
 #  kwargs.post.user_id: int
 #  kwargs.post.message: str
 #  Use kwargs.post('user_id') to retrieve the param. It should get only POST requests and validate the message by the
@@ -68,7 +68,7 @@ def get_messages(request, *args, **kwargs):
 #  As a result return JSON with response 200 - ok (google how it should look like.)
 # No need to test if that works right now. We will check it later.
 
-def insert_messages(request, *args, **kwargs):
+def insert_message(request, *args, **kwargs):
     print(request)
 
 
