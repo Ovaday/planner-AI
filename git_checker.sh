@@ -12,8 +12,11 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
     echo "Need to pull"
     sudo systemctl stop qcluster.service
+    git stash --include-untracked
     git pull
-    /home/ubuntu/planner-AI/virt_env/bin/pip install -r requirements.txt
+    source /home/ubuntu/planner-AI/virt_env/bin/activate
+    pip install -r requirements.txt
+    deactivate
     sudo systemctl start qcluster.service
 elif [ $REMOTE = $BASE ]; then
     echo "Need to push"
