@@ -19,14 +19,17 @@ from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from django.views.decorators.csrf import csrf_exempt
 
-from example import views as example_views
+from website import views as website_views
 
-from example.views import TutorialBotView
+from website.views import TutorialBotView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('webhooks/tutorial/', csrf_exempt(TutorialBotView.as_view())),
-    path('', example_views.index, name='home'),
+    path('', website_views.index, name='home'),
+
+    path('', website_views.index, name='chat_page'),
+    path("api/get_messages/<str:file_id>", website_views.index),
+    path('api/telegram_webhook', csrf_exempt(TutorialBotView.as_view())),
     path('', include("django.contrib.auth.urls")),
 ]
 

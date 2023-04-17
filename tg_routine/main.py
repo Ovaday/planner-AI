@@ -68,7 +68,7 @@ async def main_wrapper(event, is_fictious=False):
         return await asyncio.wait_for(main(my_event), timeout=0.2)
 
 
-def lambda_handler(event):
+def telegram_async_handler(event):
     try:
         print(asyncio.get_event_loop())
     except Exception as e:
