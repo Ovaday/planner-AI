@@ -30,6 +30,12 @@ def insert_input_message(in_msg: Message):
     return coll_handle.insert_one(message)
 
 
+def insert_web_message(message):
+    db_handle, mongo_client = get_db_handle()
+    coll_handle = get_collection_handle(db_handle, "messages_history")
+    return coll_handle.insert_one(message)
+
+
 def insert_response(in_msg: Message, response_text: str):
     message = construct_message(in_msg.chat_id, in_msg.date, in_msg.message_id, True, in_msg.chat.username,
                                 response_text)
