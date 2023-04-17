@@ -38,7 +38,8 @@ def get_token(token_name):
             token_value = tokens[str(token_name)]
         return token_value
     except Exception as e:
-        print('Exception: ' + str(e))
+        if token_name != 'VERCEL':
+            print('Exception: ' + str(e))
         return None
 
 
@@ -50,4 +51,12 @@ def get_db_conn():
         'PASSWORD': get_token("DB_PASSWORD"),
         'HOST': get_token("DB_HOST"),
         'PORT': '5432',
+    }
+
+
+def get_mongo_db_conn():
+    return {
+        'USER': get_token("MONGO_DB_USER"),
+        'PASSWORD': get_token("MONGO_DB_PASSWORD"),
+        'HOST': get_token("MONGO_DB_ENVIROMENT"),
     }

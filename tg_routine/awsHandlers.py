@@ -4,6 +4,7 @@ from telegram.ext import ContextTypes
 
 from helpers.localClassifiers import predict_class
 from open_ai.requestsHandler import voice_to_text, classify, get_reminder_probability
+from helpers.MessageHistoryHelpers import async_insert_response, async_insert_input_message
 import soundfile as sf
 
 from tg_routine.handlers import start
@@ -67,9 +68,11 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         openai_classification = results[1]
         local_classification = results[2]
         classification_used = local_classification
-        await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
-        await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
-        await context.bot.send_message(chat_id=chat_id, text=openai_classification)
+
+        await async_insert_input_message(message, results)
+        #await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
+        #await context.bot.send_message(chat_id=chat_id, text=f'Local classification: {local_classification}')
+        #await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
         not_released_functionality_request = get_label('not_released_functionality_request', chat.language)
 
@@ -99,5 +102,6 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def ask_chatGPT(message, chat, chat_id, context):
-    chat_gpt_response = await chatGPT_req(message.text, chat, type='normal')
+    chat_gpt_response, tokens_used = await chatGPT_req(message.text, chat, type='normal')
     await context.bot.send_message(chat_id=chat_id, text=chat_gpt_response)
+    await async_insert_response(message, chat_gpt_response, tokens_used)

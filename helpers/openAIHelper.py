@@ -82,7 +82,7 @@ async def chatGPT_req(message, tg_chat, type: _TYPES, model='gpt-3.5-turbo', ini
     )
 
     await async_tick_expenses(tg_chat.chat_id, chatgpt_response.usage.total_tokens, model)
-    return parse_response(chatgpt_response, tg_chat, words_limit, type, initial_text)
+    return parse_response(chatgpt_response, tg_chat, words_limit, type, initial_text), chatgpt_response.usage.total_tokens
 
 
 def parse_response(response, tg_chat, words_limit, type, initial_text):
