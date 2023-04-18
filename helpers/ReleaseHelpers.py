@@ -1,5 +1,8 @@
 import asyncio
+import datetime
 import json
+
+import pymongo
 from asgiref.sync import sync_to_async
 import telegram
 
@@ -25,6 +28,32 @@ def get_all_chats():
     return all_chats
 
 
+def get_latest_update():
+    db_handle, mongo_client = get_db_handle('service_data')
+    coll_handle = get_collection_handle(db_handle, "updates_log")
+
+    return json.loads(dumps(coll_handle.find_one(sort=[('update_time', pymongo.DESCENDING)]), ensure_ascii=False))
+
+
+def fill_update(last_update, version: str, update_time):
+    update = {}
+    if last_update:
+        update = last_update.copy()
+        if "_id" in update:
+            del update["_id"]
+
+    update["update_time"] = update_time
+    update["app_version"] = version
+    return update
+
+
+def insert_update(update):
+    db_handle, mongo_client = get_db_handle('service_data')
+    coll_handle = get_collection_handle(db_handle, "updates_log")
+
+    return coll_handle.insert_one(update)
+
+
 async def async_release_handler(release_version):
     bot = telegram.Bot(get_token("TG_BOT_TOKEN"))
     all_chats = await async_get_all_chats()
@@ -33,6 +62,10 @@ async def async_release_handler(release_version):
         print(chat)
         text = release_message[chat.language]
         await bot.send_message(chat_id=chat.chat_id, text=text)
+
+    last_update = await async_get_latest_update()
+    update = fill_update(last_update, release_version, datetime.datetime.now())
+    await async_insert_update(update)
 
 
 def release_handler(event):
@@ -47,3 +80,5 @@ def release_handler(event):
 
 async_get_release_message = sync_to_async(get_release_message)
 async_get_all_chats = sync_to_async(get_all_chats)
+async_get_latest_update = sync_to_async(get_latest_update)
+async_insert_update = sync_to_async(insert_update)
