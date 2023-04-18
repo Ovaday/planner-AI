@@ -1,20 +1,20 @@
 import asyncio
 
+from helpers.ReleaseHelpers import release_handler
 from helpers.openAIHelper import chatGPT_req_test
-from tg_routine.main import task_handler
+from tg_routine.main import aws_tg_message_handler
 
 
 def task_receiver(update_json, *args, **kwargs):
-    """try:
-        print(asyncio.get_event_loop())
-    except Exception as e:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-    asyncio.create_task("""
     print(update_json)
-    task_handler(update_json)
+    print(type(update_json))
 
     kwargs = kwargs['kwargs']
+    if kwargs and 'type' in kwargs:
+        if kwargs['type'] == 'tg_message':
+            aws_tg_message_handler(update_json)
+        elif kwargs['type'] == 'release' and 'version' in kwargs:
+            release_handler(kwargs['version'])
 
 def async_call_receiver(message, *args, **kwargs):
     print(message)
@@ -27,9 +27,10 @@ def async_call_receiver(message, *args, **kwargs):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         print('set_event_loop')
-        return asyncio.get_event_loop().run_until_complete(chatGPT_req_test(message, tg_chat, type, model, initial_text))
+        return asyncio.get_event_loop().run_until_complete(
+            chatGPT_req_test(message, tg_chat, type, model, initial_text))
     except Exception as e:
         print('run with exception')
         print(e)
-        return asyncio.get_event_loop().run_until_complete(chatGPT_req_test(message, tg_chat, type, model, initial_text))
-
+        return asyncio.get_event_loop().run_until_complete(
+            chatGPT_req_test(message, tg_chat, type, model, initial_text))

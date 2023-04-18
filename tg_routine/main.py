@@ -111,7 +111,7 @@ def lambda_handler(event):
     return asyncio.get_event_loop().run_until_complete(main_wrapper(event))
 
 
-def task_handler(event):
+def aws_tg_message_handler(event):
     try:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)

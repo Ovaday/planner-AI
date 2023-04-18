@@ -40,19 +40,27 @@ labels = {
             'english': 'The request was not processed because the processing time was too long. Try shortening the request or try again later.'},
     'help':
         {'russian':
-             """Данный чат-бот призван улучшить жизнь, оптимизируя все необходимое для организации эффективного планирования и работы в одном месте. Для своей работы бот использует передовые технологии, нейронные сети с ChatGPT и распознавание голоса (в будущем).
+             """Данный чат-бот призван улучшить жизнь, оптимизируя все необходимое для организации эффективного планирования и работы в одном месте. Для своей работы бот использует передовые технологии, нейронные сети с ChatGPT и распознавание голоса.
 
 Текущий функционал команд:
 /help - получение справки
 /start - запрос одобрения и смена языка
-/my_reminders - мои напоминания""",
+
+Планируемый функционал в следующих релизах:
+* Сохранение сообщения
+* Добавление напоминаний
+* Создание ToDo-листов""",
          'english':
-             """This chatbot is designed to improve life by streamlining everything you need to organize efficient scheduling and work in one place. The bot uses advanced technology, neural networks with ChatGPT and voice recognition (in the future) for its work.
+             """This chatbot is designed to improve life by streamlining everything you need to organize efficient scheduling and work in one place. The bot uses advanced technology, neural networks with ChatGPT and voice recognition for its work.
 
 The current functionality of the commands:
 /help - getting help
 /start - request approval and change the language.
-/my_reminders - my reminders"""},
+
+Planned functionality in the next releases:
+* Saving a message
+* Adding reminders
+* Creation of ToDo lists"""},
     'no_reminders':
         {'russian': 'У вас пока нет напоминаний.',
          'english': 'There are no reminders yet.'},
