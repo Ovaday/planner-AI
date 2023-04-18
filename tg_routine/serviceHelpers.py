@@ -29,8 +29,8 @@ def audio_json_to_text(json_update, recognized_text):
 
 async def set_reminder(message, chat, chat_id, context, prob):
     results = await asyncio.gather(
-        chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
-        chatGPT_req(fill_reminder_advice_request(message.text, chat.language), chat, type='advice_for_reminder'))
+        chatGPT_req(fill_reminder_template(message.text), chat, chat_id, msg_type='reminder_time', initial_text=message.text),
+        chatGPT_req(fill_reminder_advice_request(message.text, chat.language), chat, chat_id, msg_type='advice_for_reminder'))
     print(' set_reminder asyncio.gather executed')
     print(results)
     reminder_time = results[0]
@@ -42,8 +42,8 @@ async def set_reminder(message, chat, chat_id, context, prob):
 
 async def set_reminder_and_answer(message, chat, chat_id, context, prob):
     results = await asyncio.gather(
-        chatGPT_req(fill_reminder_template(message.text), chat, type='reminder_time', initial_text=message.text),
-        chatGPT_req(message.text, chat, type='normal'))
+        chatGPT_req(fill_reminder_template(message.text), chat, chat_id, msg_type='reminder_time', initial_text=message.text),
+        chatGPT_req(message.text, chat, chat_id, msg_type='normal'))
     print(' set_reminder_and_answer asyncio.gather executed')
     print(results)
     reminder_time = results[0]

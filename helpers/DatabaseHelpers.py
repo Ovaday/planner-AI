@@ -97,6 +97,8 @@ def assign_last_conversation(chat_id, conversation):
 
 
 def return_records_list(search_result):
+    print("return_records_list")
+    print(search_result)
     records_list = []
     for record in search_result:
         records_list.append(record)
@@ -104,11 +106,8 @@ def return_records_list(search_result):
 
 
 def return_single_record(search_result):
-    records_list = []
-    for record in search_result:
-        records_list.append(record)
-    if len(records_list) > 0:
-        return records_list
+    if search_result:
+        return search_result.copy()
     else:
         return None
 
