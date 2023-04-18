@@ -40,16 +40,16 @@ def get_messages(request, *args, **kwargs):
         return Http401()
     if request.method == "GET":
 
-        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_messages_for_user()
+        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
         # ToDo Anastasia: Include case when there are no messages.
         # You should return list with the following format:
         messages = [{
             "chat_id": 'chat_id',
             "message_time": 'message_time',
             "message_id": 'message_id',
-            "is_response": 'is_response',
             "username": 'username',
             "message": 'message',
+            "response": 'response'
             }, ]
         # To test, launch the server and open page:
         # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
