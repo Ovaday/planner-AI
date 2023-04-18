@@ -102,6 +102,6 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def ask_chatGPT(message, chat, chat_id, context):
-    chat_gpt_response, tokens_used = await chatGPT_req(message.text, chat, type='normal')
+    chat_gpt_response, tokens_used = await chatGPT_req(message.text, chat, chat_id, msg_type='normal')
     await context.bot.send_message(chat_id=chat_id, text=chat_gpt_response)
     await async_insert_response(message, chat_gpt_response, tokens_used)
