@@ -5,8 +5,7 @@ import re
 import openai
 
 from helpers.DatabaseHelpers import async_tick_expenses
-from helpers.MessageHistoryHelpers import async_get_last_messages_to_user, async_get_last_messages_from_user, \
-    async_get_last_user_messages
+from helpers.MessageHistoryHelpers import async_get_last_user_messages
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label
 from typing import Literal
@@ -58,22 +57,17 @@ async def chatGPT_req(message, tg_chat, chat_id, msg_type: _TYPES, model='gpt-3.
     elif msg_type == 'normal':
         last_messages = await async_get_last_user_messages(chat_id)
         print(last_messages)
-        #last_responses = await async_get_last_messages_to_user(tg_chat.chat_id)
-        #print("last_responses")
-        #print(last_responses)
-        #last_questions = await async_get_last_messages_from_user(tg_chat.chat_id)
-        #print("last_questions")
-        #print(last_questions)
         messages = [{"role": "system", "content": system_content}]
-        #if len(last_responses) > 1:
-        #    grand_prev_response = str_return_first_n(last_responses[1]['message_raw'])
-        #    messages.append({"role": "assistant", "content": grand_prev_response})
-        #if len(last_questions) > 0:
-        #   prev_message = str_return_first_n(last_responses[0]['message_raw'])
-        #    messages.append({"role": "user", "content": prev_message})
-        #if len(last_responses) > 0:
-        #    prev_response = str_return_first_n(last_responses[0]['message_raw'])
-        #    messages.append({"role": "assistant", "content": prev_response})
+        if len(last_messages) > 2:
+            if last_messages[2]['response_raw'] and len(last_messages[2]['response_raw']):
+                grand_prev_response = str_return_first_n(last_messages[2]['response_raw'])
+                messages.append({"role": "assistant", "content": grand_prev_response})
+        if len(last_messages) > 1:
+            prev_message = str_return_first_n(last_messages[1]['message_raw'])
+            messages.append({"role": "user", "content": prev_message})
+            if last_messages[1]['response_raw'] and len(last_messages[1]['response_raw']):
+                prev_response = str_return_first_n(last_messages[1]['response_raw'])
+                messages.append({"role": "assistant", "content": prev_response})
         messages.append({"role": "user", "content": message})
 
     if len(messages) == 0:
@@ -152,9 +146,9 @@ def replace_bools(text):
     return text.replace('True', 'true').replace('False', 'false')
 
 
-def str_return_first_n(string, length=150):
+def str_return_first_n(string, length=300):
     if len(string) > length:
-        string = string[:length] + '...'
+        string = string[:length] + '[too big text cutted to save tokens]'
     return string
 
 
