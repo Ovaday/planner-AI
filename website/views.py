@@ -9,6 +9,7 @@ from django.views import View
 
 from tg_routine.main import lambda_handler
 
+
 def index(response):
     current_user = response.user
     username = "anonymous"
@@ -23,10 +24,9 @@ def index(response):
     return render(response, "index.html", context)
 
 
-
-
 def error_404_view(response):
     return render(response, "404.html")
+
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -34,9 +34,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-
 # https://api.telegram.org/bot<token>/setWebhook?url=<url>/webhooks/tutorial/
-class TutorialBotView(View):
+class TelegramBotView(View):
     def post(self, request, *args, **kwargs):
         t_data = json.loads(request.body)
         print(t_data)

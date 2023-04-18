@@ -95,7 +95,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             else:
                 await async_assign_last_conversation(chat_id, message.text)
                 print('Invoke AWS EC2')
-                async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
+                async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={'type': 'tg_message'})
 
 
 async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -109,4 +109,4 @@ async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     else:
         print('process_voice_message')
-        async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
+        async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={'type': 'tg_message'})

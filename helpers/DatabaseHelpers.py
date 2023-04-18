@@ -96,6 +96,23 @@ def assign_last_conversation(chat_id, conversation):
     chat.save()
 
 
+def return_records_list(search_result):
+    records_list = []
+    for record in search_result:
+        records_list.append(record)
+    return records_list
+
+
+def return_single_record(search_result):
+    records_list = []
+    for record in search_result:
+        records_list.append(record)
+    if len(records_list) > 0:
+        return records_list
+    else:
+        return None
+
+
 async_get_chat = sync_to_async(get_chat)
 async_get_creator = sync_to_async(get_creator)
 async_set_language = sync_to_async(set_language)

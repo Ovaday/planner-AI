@@ -2,7 +2,7 @@ import pymongo
 from asgiref.sync import sync_to_async
 from telegram import Message
 
-from helpers.DatabaseHelpers import get_collection_handle, get_db_handle
+from helpers.DatabaseHelpers import get_collection_handle, get_db_handle, return_records_list
 
 
 def construct_message(chat_id: int, message_time: any, message_id: int, is_response: bool, username: str, message: str,
@@ -73,13 +73,6 @@ def get_last_messages_to_user(user_id: int):
     coll_handle = get_collection_handle(db_handle, "messages_history")
     return return_records_list(
         coll_handle.find({"chat_id": user_id, "is_response": True}).sort('message_time', pymongo.DESCENDING).limit(3))
-
-
-def return_records_list(search_result):
-    records_list = []
-    for record in search_result:
-        records_list.append(record)
-    return records_list
 
 
 async_insert_input_message = sync_to_async(insert_input_message)
