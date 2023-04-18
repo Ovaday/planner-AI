@@ -37,16 +37,24 @@ def insert_input_message(in_msg: Message, classification_results=None):
     return coll_handle.insert_one(message)
 
 
-def insert_response(in_msg: Message, response_text: str, tokens_used: int):
+def insert_response(in_msg: Message, response_text: str, tokens_used=None):
     db_handle, mongo_client = get_db_handle()
     coll_handle = get_collection_handle(db_handle, "messages_history")
-    additional_info = {
-        'tokens_used': tokens_used
-    }
+    additional_info = {}
+    if tokens_used:
+        additional_info = {
+            'tokens_used': tokens_used
+        }
     update_query = {"chat_id": in_msg.chat_id, "message_id": in_msg.message_id}
     new_values = {"$set": {"response_raw": response_text, "additional_info": additional_info}}
 
     return coll_handle.update_one(update_query, new_values)
+
+
+def insert_web_message(message):
+    db_handle, mongo_client = get_db_handle()
+    coll_handle = get_collection_handle(db_handle, "messages_history")
+    return coll_handle.insert_one(message)
 
 
 def get_message_for_user_by_id(user_id: int, message_id: int):
