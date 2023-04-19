@@ -14,6 +14,7 @@ def fill_log_template(exception, function_name='', current_datetime=datetime.dat
         exception_str = str(exception)
 
     return {
+        "function_name": function_name,
         "exception": exception_str,
         "datetime": current_datetime,
         "chat_id": chat_id

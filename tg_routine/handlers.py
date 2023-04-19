@@ -3,6 +3,7 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
 from helpers.DatabaseHelpers import *
+from helpers.LoggingHelpers import async_insert_log
 from tg_routine.serviceHelpers import *
 
 
@@ -35,6 +36,10 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language))
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
+    elif choice == 'error':
+        await async_insert_log(update.to_json(), 'button', chat_id=chat_id)
+        chat = await async_get_chat(chat_id)
+        await query.edit_message_text(text=f"{get_label('thank_you_for_error', chat.language)}")
 
 
 async def timeout(update: Update, context: ContextTypes.DEFAULT_TYPE):

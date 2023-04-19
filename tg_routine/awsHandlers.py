@@ -1,5 +1,7 @@
 import io
 import json
+
+from telegram import ReplyKeyboardMarkup
 from telegram.ext import ContextTypes
 
 from helpers.localClassifiers import predict_class
@@ -75,26 +77,30 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
         not_released_functionality_request = get_label('not_released_functionality_request', chat.language)
+        reply_keyboard = [[get_label('it_was_mistake', chat.language)]]
+        reply_markup = ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True, input_field_placeholder="error"
+        )
 
         # ToDo: There should be an error button
         if define_needs_reminder(reminder_probability, classification_used):
             request_type_label = get_label('reminder_request_type', chat.language)
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
             msg = not_released_functionality_request.format(request_type=request_type_label)
-            await context.bot.send_message(chat_id=chat_id, text=msg)
+            await context.bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup)
         elif define_sets_goal(reminder_probability, classification_used):
             request_type_label = get_label('goal_request_type', chat.language)
             msg = not_released_functionality_request.format(request_type=request_type_label)
-            await context.bot.send_message(chat_id=chat_id, text=msg)
+            await context.bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup)
         elif define_probably_needs_reminder(reminder_probability, classification_used):
             request_type_label = get_label('appointment_request_type', chat.language)
             msg = not_released_functionality_request.format(request_type=request_type_label)
-            await context.bot.send_message(chat_id=chat_id, text=msg)
+            await context.bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup)
             # await set_reminder_and_answer(message, chat, chat_id, context, reminder_probability)
         elif define_needs_save(reminder_probability, classification_used):
             request_type_label = get_label('save_request_type', chat.language)
             msg = not_released_functionality_request.format(request_type=request_type_label)
-            await context.bot.send_message(chat_id=chat_id, text=msg)
+            await context.bot.send_message(chat_id=chat_id, text=msg, reply_markup=reply_markup)
             # await context.bot.send_message(chat_id=chat_id, text=get_label('ask_to_save', chat.language))
         #else:
         await ask_chatGPT(message, chat, chat_id, context)
