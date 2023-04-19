@@ -72,5 +72,5 @@ async def resolve_main_params(update: Update):
     print(message)
     chat_id = update.effective_chat.id
 
-    chat = await async_get_chat(chat_id)
+    chat = await async_get_chat(chat_id, update)
     return message, chat_id, chat

@@ -1,4 +1,5 @@
 from asgiref.sync import sync_to_async
+from telegram import Update
 
 from helpers.tokenHelpers import get_mongo_db_conn
 from tg_bot.models import Chat
@@ -18,7 +19,7 @@ def get_collection_handle(db_handle, collection_name):
     return db_handle[collection_name]
 
 
-def get_chat(chat_id):
+def get_chat(chat_id, update: Update):
     chat = Chat.objects.filter(chat_id=chat_id)
     print('chat')
     print(chat)
@@ -26,17 +27,23 @@ def get_chat(chat_id):
         print('no chat')
         chat = {
             "chat_id": chat_id,
-            "counter": 0
+            "counter": 0,
+            "username": update.effective_chat.username
         }
         response = Chat.objects.create(
             chat_id=chat['chat_id'],
             counter=chat['counter'],
+            username=chat['username'],
             is_approved=False,
         )
         print(response)
         chat = response
     else:
         chat = chat.first()
+
+    if chat.username != update.effective_chat.username:
+        chat.username = update.effective_chat.username
+        chat.save()
     return chat
 
 
