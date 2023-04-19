@@ -16,15 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path, include, re_path
+from django.urls import path, include
 from django.views.decorators.csrf import csrf_exempt
 
-from example.views import TutorialBotView
+from website import views as example_views
+
+from website.views import TelegramBotView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('example.urls')),
-    path('webhooks/tutorial/', csrf_exempt(TutorialBotView.as_view())),
+    path('api/telegram_webhook', csrf_exempt(TelegramBotView.as_view())),
+    path('', example_views.index, name='home'),
+    path('', include("django.contrib.auth.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

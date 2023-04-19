@@ -6,7 +6,8 @@ db.sqlite3
 media
 
 # Environments 
-.env 
+*.env
+.env.*
 .venv 
 env/ 
 venv/ 
@@ -15,3 +16,7 @@ env.bak/
 venv.bak/
 .idea/
 virt_env/
+resources/extracted/
+*-checkpoint.ipynb
+.ipynb_checkpoints/
+personal/
