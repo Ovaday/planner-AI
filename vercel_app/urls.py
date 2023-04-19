@@ -25,7 +25,7 @@ from website.views import TelegramBotView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/telegram_webhook', csrf_exempt(TelegramBotView.as_view())),
+    path('api/telegram_webhook/', csrf_exempt(TelegramBotView.as_view())),
     path('', example_views.index, name='home'),
     path('', include("django.contrib.auth.urls")),
 ]
