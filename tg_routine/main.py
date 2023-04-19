@@ -1,6 +1,8 @@
 import asyncio
 from django.http import JsonResponse
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
+
+from helpers.LoggingHelpers import async_insert_log
 from helpers.tokenHelpers import get_token
 from tg_routine.commandHandlers import *
 from tg_routine.handlers import start, echo, button, timeout, audio
@@ -49,6 +51,7 @@ async def main(event):
 
     except Exception as exc:
         print(exc)
+        await async_insert_log(exc, 'main')
         return JsonResponse(status=500, data={"nok": "POST request failed"})
 
 
@@ -75,6 +78,7 @@ async def main_qcluster(event):
         traceback.print_tb(exc.__traceback__)
         print(traceback.format_exc())
         print(exc)
+        await async_insert_log(exc, 'main_qcluster')
         return JsonResponse(status=500, data={"nok": "POST request failed"})
 
 
@@ -99,6 +103,8 @@ async def main_wrapper(event, is_fictious=False):
                                                                  'entities': [{'offset': 0, 'length': 8,
                                                                                'type': 'bot_command'}]}}
         return await asyncio.wait_for(main(my_event), timeout=0.2)
+    except Exception as e:
+        await async_insert_log(e, 'main_wrapper')
 
 
 def lambda_handler(event):
