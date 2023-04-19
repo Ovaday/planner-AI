@@ -143,7 +143,7 @@ else:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 Q_CLUSTER = {
-    'name': 'django-sqs-dev',
+    'name': get_token("Q_CLUSTER_NAME"),
     'workers': 4,
     'timeout': 60,
     'retry': 90,
@@ -152,7 +152,7 @@ Q_CLUSTER = {
     'ack_failures': True,
     'bulk': 5,
     'sqs': {
-        'aws_region': get_token("AWS_REGION"),  # optional
+        'aws_region': get_token("IAM_AWS_REGION"),  # optional
         'aws_access_key_id': get_token("IAM_ACCESS_KEY"),  # optional
         'aws_secret_access_key': get_token("IAM_SECRET_KEY"),  # optional
         'receive_message_wait_time_seconds': 20

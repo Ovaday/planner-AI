@@ -27,14 +27,20 @@ def get_token(token_name):
         return None
 
     token_value = os.getenv(token_name)
-    if token_value:
-        return token_value
 
     try:
-        if "IAM_" in token_name or "DEBUG_MODE" in token_name or config('ENV') == "PROD":
+        if token_value:
+            return token_value
+        elif os.getenv('VERCEL'):
+            tokens = json.loads(settings.SECRETS.get_secret_string(os.getenv("SECRETS_PATH")))
+            token_value = tokens[str(token_name)]
+            if token_value:
+                return token_value
+
+        if "IAM_" in token_name or "DEBUG_MODE" in token_name:
             token_value = config(str(token_name))
         else:
-            tokens = json.loads(settings.SECRETS.get_secret_string("dev/plannerAI"))
+            tokens = json.loads(settings.SECRETS.get_secret_string(config(str("SECRETS_PATH"))))
             token_value = tokens[str(token_name)]
         return token_value
     except Exception as e:
