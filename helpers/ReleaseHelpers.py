@@ -5,6 +5,7 @@ import json
 import pymongo
 from asgiref.sync import sync_to_async
 import telegram
+from telegram.constants import ParseMode
 
 from helpers.DatabaseHelpers import get_collection_handle, get_db_handle
 from bson.json_util import dumps
@@ -61,7 +62,7 @@ async def async_release_handler(release_version):
     for chat in all_chats:
         print(chat)
         text = release_message[chat.language]
-        await bot.send_message(chat_id=chat.chat_id, text=text)
+        await bot.send_message(chat_id=chat.chat_id, text=text, parse_mode=ParseMode.MARKDOWN)
 
     last_update = await async_get_latest_update()
     update = fill_update(last_update, release_version, datetime.datetime.now())
