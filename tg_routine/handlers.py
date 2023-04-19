@@ -35,7 +35,10 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                            reply_markup=reply_markup)
         else:
             await async_set_approved(chat.chat_id, False)
-            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language))
+            keyboard = [
+                [InlineKeyboardButton(get_label('it_was_mistake', chat.language), callback_data=f'error_{chat_id}'), ]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language), reply_markup=reply_markup)
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
     elif choice[:5] == 'error':
