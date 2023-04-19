@@ -19,7 +19,7 @@ def get_collection_handle(db_handle, collection_name):
     return db_handle[collection_name]
 
 
-def get_chat(chat_id, update: Update):
+def get_chat(chat_id, update=None):
     chat = Chat.objects.filter(chat_id=chat_id)
     print('chat')
     print(chat)
@@ -28,8 +28,10 @@ def get_chat(chat_id, update: Update):
         chat = {
             "chat_id": chat_id,
             "counter": 0,
-            "username": update.effective_chat.username
+            "username": ''
         }
+        if update:
+            chat["username"] = update.effective_chat.username
         response = Chat.objects.create(
             chat_id=chat['chat_id'],
             counter=chat['counter'],
@@ -41,7 +43,7 @@ def get_chat(chat_id, update: Update):
     else:
         chat = chat.first()
 
-    if chat.username != update.effective_chat.username:
+    if update and chat.username != update.effective_chat.username:
         chat.username = update.effective_chat.username
         chat.save()
     return chat
