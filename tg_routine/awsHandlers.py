@@ -1,7 +1,7 @@
 import io
 import json
 
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
 from helpers.localClassifiers import predict_class
@@ -69,7 +69,7 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reminder_probability = results[0]
         openai_classification = results[1]
         local_classification = results[2]
-        classification_used = local_classification
+        classification_used = openai_classification
 
         await async_insert_input_message(message, results)
         #await context.bot.send_message(chat_id=chat_id, text=f'Reminder probability: {reminder_probability}')
@@ -77,12 +77,9 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         #await context.bot.send_message(chat_id=chat_id, text=openai_classification)
 
         not_released_functionality_request = get_label('not_released_functionality_request', chat.language)
-        reply_keyboard = [[get_label('it_was_mistake', chat.language)]]
-        reply_markup = ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder="error"
-        )
+        keyboard = [[InlineKeyboardButton(get_label('it_was_mistake', chat.language), callback_data=f'error_{chat_id}'),]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-        # ToDo: There should be an error button
         if define_needs_reminder(reminder_probability, classification_used):
             request_type_label = get_label('reminder_request_type', chat.language)
             # await set_reminder(message, chat, chat_id, context, reminder_probability)
@@ -109,5 +106,6 @@ async def chat_gpt_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def ask_chatGPT(message, chat, chat_id, context):
     chat_gpt_response, tokens_used = await chatGPT_req(message.text, chat, chat_id, msg_type='normal')
-    await context.bot.send_message(chat_id=chat_id, text=chat_gpt_response)
+    reply_markup = ReplyKeyboardRemove()
+    await context.bot.send_message(chat_id=chat_id, text=chat_gpt_response, reply_markup=reply_markup)
     await async_insert_response(message, chat_gpt_response, tokens_used)
