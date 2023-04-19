@@ -4,6 +4,7 @@ import json
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes
 
+from helpers.DatabaseHelpers import async_assign_last_conversation
 from helpers.localClassifiers import predict_class
 from open_ai.requestsHandler import voice_to_text, classify, get_reminder_probability
 from helpers.MessageHistoryHelpers import async_insert_response, async_insert_input_message
@@ -21,6 +22,7 @@ async def audio_aws(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print('processed_voice_message')
     recognized_text = await voice_to_text(chat, mem_file, duration)
     print('recognized_text')
+    await async_assign_last_conversation(chat_id, recognized_text)
     await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat_id,
                                    text=f"""{get_label('recognized', chat.language)}: {recognized_text}
 
