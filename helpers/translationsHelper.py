@@ -106,14 +106,6 @@ The current functionality of the commands:
         {
             'russian': 'Изменить время',
             'english': 'Change time'},
-    'recognized':
-        {
-            'russian': 'Распознанный текст',
-            'english': 'Recognized text'},
-    'processing_wait':
-        {
-            'russian': 'Обрабатываю запрос...',
-            'english': 'Processing the request...'},
     'delete':
         {
             'russian': 'Удалить',
@@ -160,9 +152,7 @@ _TYPES = Literal[
     'at',
     'analyze_request',
     'analyze_request_requirement',
-    'event_identified',
-    'recognized',
-    'processing_wait'
+    'event_identified'
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']

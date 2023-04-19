@@ -3,7 +3,7 @@ import re
 
 import openai
 
-from helpers.DatabaseHelpers import async_tick_expenses
+from helpers.DatabaseHelpers import async_tick_tokens
 from helpers.tokenHelpers import get_token
 from helpers.translationsHelper import get_label
 from typing import Literal
@@ -15,8 +15,6 @@ _TYPES = Literal[
     'reminder_time',
     'advanced_classification_request'
 ]
-
-
 async def chatGPT_req_test(message, tg_chat, type, model='gpt-3.5-turbo', initial_text=''):
     print(message)
     print(tg_chat)
@@ -67,9 +65,9 @@ async def chatGPT_req(message, tg_chat, type: _TYPES, model='gpt-3.5-turbo', ini
         system_content = f"""Important: Provide ONLY the requested form in the output and no other text!!!"""
 
     messages = [
-        {"role": "system", "content": system_content},
-        {"role": "user", "content": message}
-    ]
+            {"role": "system", "content": system_content},
+            {"role": "user", "content": message}
+        ]
     if examples and len(examples) > 0:
         messages.append(examples)
     chatgpt_response = openai.ChatCompletion.create(
@@ -81,7 +79,7 @@ async def chatGPT_req(message, tg_chat, type: _TYPES, model='gpt-3.5-turbo', ini
         ]
     )
 
-    await async_tick_expenses(tg_chat.chat_id, chatgpt_response.usage.total_tokens, model)
+    await async_tick_tokens(tg_chat.chat_id, chatgpt_response.usage.total_tokens)
     return parse_response(chatgpt_response, tg_chat, words_limit, type, initial_text)
 
 
@@ -101,7 +99,6 @@ def parse_response(response, tg_chat, words_limit, type, initial_text):
     else:
         return message
 
-
 def parse_reminder_probability(text):
     return_val = parse_json(text)
     if 'reminder_probability' in return_val:
@@ -113,14 +110,15 @@ def parse_reminder_probability(text):
     else:
         return 5
 
-
 def parse_json(text):
     pattern = r"{.*}"
     json_dict = {}
     text = "{" + text.split("{", 1)[1]  # remove the text before the JSON
-    text = text.split("}", 1)[0] + "}"  # remove the text after the JSON
+    text = text.split("}", 1)[0] + "}" # remove the text after the JSON
     text = text.replace("\'", "\"")
     text = replace_bools(text)
+    print(text)
+    print(type(text))
     try:
         return json.loads(text)
     except Exception as e:
@@ -132,7 +130,6 @@ def parse_json(text):
         json_dict = json.loads(matches[0])
         print(json_dict)
     return json_dict
-
 
 def replace_bools(text):
     return text.replace('True', 'true').replace('False', 'false')

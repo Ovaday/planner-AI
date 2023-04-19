@@ -10,7 +10,6 @@ from telegram.ext import ContextTypes
 from helpers.DatabaseHelpers import async_get_chat
 from helpers.ScheduleHelpers import async_to_schedule, get_my_reminders
 from helpers.translationsHelper import get_label
-from tg_routine.handlers import lambda_call_wrapper
 from tg_routine.serviceHelpers import check_is_chat_approved
 from tg_routine.templates import fill_reminder_template
 

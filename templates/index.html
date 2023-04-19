@@ -4,206 +4,132 @@
 {% block title %}Planner-AI{% endblock %}
 
 {% block page_content %}
-{% endblock %} <!-- Body -->
-
-
-{% block top_bar %}
-<div class="container d-flex justify-content-center justify-content-md-between">
-    <div class="contact-info d-flex align-items-center">
-        <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
-        <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
+<section id="hero" class="d-flex align-items-center">
+    <div class="container" data-aos="zoom-out" data-aos-delay="100">
+        <h1>Welcome to <span>Planner-AI</span></h1>
+        <br/>
+        <h2>The ultimate Telegram bot for ChatGPT, reminder and data analysis.<br/>
+            Stay organized and efficient in one platform!</h2>
+        <div class="d-flex">
+            <a href="http://t.me/PlannerAI_bot" class="btn-get-started">Get Started</a>
+        </div>
     </div>
-    <div class="social-links d-none d-md-flex align-items-center">
-        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></i></a>
-    </div>
-</div>
-{% endblock %}
-
-
-{% block header %}
-    <div class="container d-flex align-items-center justify-content-between">
-        <nav id="navbar" class="navbar">
-<ul>
-    <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-    <li><a class="nav-link scrollto" href="#about">About</a></li>
-    <li><a class="nav-link scrollto" href="#services">Services</a></li>
-    <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li>
-    <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-        <ul>
-            <li><a href="#">Drop Down 1</a></li>
-            <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                    <li><a href="#">Deep Drop Down 1</a></li>
-                    <li><a href="#">Deep Drop Down 2</a></li>
-                    <li><a href="#">Deep Drop Down 3</a></li>
-                    <li><a href="#">Deep Drop Down 4</a></li>
-                    <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-            </li>
-            <li><a href="#">Drop Down 2</a></li>
-            <li><a href="#">Drop Down 3</a></li>
-            <li><a href="#">Drop Down 4</a></li>
-        </ul>
-    </li>
-    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-</ul>
-<i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-{% endblock %}
-
-{% block hero %}
-<div class="container" data-aos="zoom-out" data-aos-delay="100">
-    <h1>Welcome to <span>Planner-AI</span></h1>
-    <h2>We are team of talented designers making websites with Bootstrap</h2>
-    <div class="d-flex">
-        <a href="#about" class="btn-get-started scrollto">Get Started</a>
-        <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
-    </div>
-</div>
-{% endblock %}
-
-{% block about %}
+</section>
 
 <!-- ======= About Section ======= -->
 <section id="about" class="about section-bg">
     <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-            <h2>About</h2>
-            <h3>Find Out More <span>About Us</span></h3>
-            <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
+            <h2>About Planner-AI Tool</h2>
+            <h3>Discover more about the <span>Telegram AI Bot</span></h3>
+            <p>Planner-AI Tool is an intelligent and versatile Telegram bot that helps you manage your day-to-day tasks
+                effectively. It comes with a range of features such as voice recognition, data analysis, reminders, and
+                integration with ChatGPT, making it an all-in-one solution for your productivity needs.</p>
         </div>
 
         <div class="row">
             <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-                <img src="{% static 'img/about.jpg' %}" class="img-fluid" alt="">
+                <img src="{% static 'img/about.jpg' %}" class="img-fluid" alt="Planner-AI Tool Image">
             </div>
-            <div class="col-lg-6 pt-4 pt-lg-0 content d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
+            <div class="col-lg-6 pt-4 pt-lg-0 content d-flex flex-column justify-content-center" data-aos="fade-up"
+                 data-aos-delay="100">
+                <h3>Efficiently Manage Your Daily Tasks with Planner-AI Tool</h3>
                 <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
+                    Answers all your question with voice message support and not only it...
                 </p>
                 <ul>
                     <li>
                         <i class="bx bx-store-alt"></i>
                         <div>
-                            <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                            <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                            <h5>Optimize Your Workflow with AI-Powered Features</h5>
+                            <p>Planner-AI Tool utilizes advanced algorithms and data analysis to help you optimize your
+                                workflow and improve your productivity.</p>
                         </div>
                     </li>
                     <li>
                         <i class="bx bx-images"></i>
                         <div>
-                            <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                            <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                            <h5>Never Forget Important Tasks with Personalized Reminders</h5>
+                            <p>Planner-AI Tool comes with intelligent reminder features that adapt to your needs and
+                                schedule, ensuring that you never forget important tasks.</p>
                         </div>
                     </li>
                 </ul>
                 <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
+                    With Planner-AI Tool, you can efficiently manage your daily tasks and increase your productivity.
+                    The bot is designed to help you save time, reduce stress, and stay organized. So why wait?<br/>
+                    Start using Planner-AI Tool today and take control of your day!
                 </p>
             </div>
         </div>
     </div>
-
-<!-- ======= Clients Section ======= -->
-<section id="clients" class="clients section-bg">
-    <div class="container" data-aos="zoom-in">
-
-        <div class="row">
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-1.png' %}" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-2.png' %}" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-3.png' %}" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-4.png' %}" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-5.png' %}" class="img-fluid" alt="">
-            </div>
-
-            <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
-                <img src="{% static 'img/clients/client-6.png' %}" class="img-fluid" alt="">
-            </div>
-
-        </div>
-
-    </div>
-</section><!-- End Clients Section -->
+</section>
 
 <!-- ======= Services Section ======= -->
 <section id="services" class="services">
     <div class="container" data-aos="fade-up">
-
         <div class="section-title">
-            <h2>Services</h2>
-            <h3>Check our <span>Services</span></h3>
-            <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
+            <h2>Features</h2>
+            <h3>Discover Our <span>Key Features</span></h3>
+            <p>PlannerAI is a comprehensive Telegram bot that offers a range of features to help you stay organized,
+                productive, and efficient.</p>
         </div>
 
         <div class="row">
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                    <h4><a href="">Lorem Ipsum</a></h4>
-                    <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+                    <div class="icon"><i class="bx bx-microphone"></i></div>
+                    <h4>Voice Recognition</h4>
+                    <p>PlannerAI offers voice recognition capabilities that allow you to easily input tasks, requests and
+                        reminders, even when your hands are full.</p>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in"
+                 data-aos-delay="200">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bx-file"></i></div>
-                    <h4><a href="">Sed ut perspiciatis</a></h4>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                    <div class="icon"><i class="bx bx-data"></i></div>
+                    <h4>Data Analysis</h4>
+                    <p>PlannerAI utilizes advanced data analysis techniques to help you identify patterns, optimize your
+                        workflow, and improve your productivity.</p>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in" data-aos-delay="300">
+            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0" data-aos="zoom-in"
+                 data-aos-delay="300">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bx-tachometer"></i></div>
-                    <h4><a href="">Magni Dolores</a></h4>
-                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+                    <div class="icon"><i class="bx bx-bell"></i></div>
+                    <h4>Reminders</h4>
+                    <p>PlannerAI offers intelligent reminder features that adapt to your needs and schedule, ensuring
+                        that you never forget important tasks.</p>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bx-world"></i></div>
-                    <h4><a href="">Nemo Enim</a></h4>
-                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+                    <div class="icon"><i class="bx bx-chat"></i></div>
+                    <h4>Integration with ChatGPT</h4>
+                    <p>PlannerAI seamlessly integrates with ChatGPT, allowing you to access a wealth of information and
+                        insights to help you stay organized and productive.</p>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bx-slideshow"></i></div>
-                    <h4><a href="">Dele cardo</a></h4>
-                    <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
+                    <div class="icon"><i class="bx bx-calendar"></i></div>
+                    <h4>Calendar Management</h4>
+                    <p>PlannerAI allows you to easily manage your calendar and schedule, ensuring that you never miss an
+                        important meeting or appointment.</p>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="200">
                 <div class="icon-box">
-                    <div class="icon"><i class="bx bx-arch"></i></div>
-                    <h4><a href="">Divera don</a></h4>
-                    <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
+                    <div class="icon"><i class="bx bx-list-check"></i></div>
+                    <h4>To-Do Lists</h4>
+                    <p>Whether it's for personal or professional tasks, you can keep track of what needs to be done and
+                        mark off completed items. Stay organized and on top of your daily tasks.</p>
                 </div>
             </div>
 
@@ -212,344 +138,37 @@
     </div>
 </section><!-- End Services Section -->
 
-<!-- ======= Testimonials Section ======= -->
-<section id="testimonials" class="testimonials">
-    <div class="container" data-aos="zoom-in">
-
-        <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-            <div class="swiper-wrapper">
-
-                <div class="swiper-slide">
-                    <div class="testimonial-item">
-                        <img src="{% static 'img/testimonials/testimonials-1.jpg' %} " class="testimonial-img" alt="">
-                        <h3>Saul Goodman</h3>
-                        <h4>Ceo &amp; Founder</h4>
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                            Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                    </div>
-                </div><!-- End testimonial item -->
-
-                <div class="swiper-slide">
-                    <div class="testimonial-item">
-                        <img src="{% static 'img/testimonials/testimonials-2.jpg' %}" class="testimonial-img" alt="">
-                        <h3>Sara Wilsson</h3>
-                        <h4>Designer</h4>
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                            Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                    </div>
-                </div><!-- End testimonial item -->
-
-                <div class="swiper-slide">
-                    <div class="testimonial-item">
-                        <img src="{% static 'img/testimonials/testimonials-3.jpg' %}" class="testimonial-img" alt="">
-                        <h3>Jena Karlis</h3>
-                        <h4>Store Owner</h4>
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                            Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                    </div>
-                </div><!-- End testimonial item -->
-
-                <div class="swiper-slide">
-                    <div class="testimonial-item">
-                        <img src="{% static 'img/testimonials/testimonials-4.jpg' %}" class="testimonial-img" alt="">
-                        <h3>Matt Brandon</h3>
-                        <h4>Freelancer</h4>
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                            Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                    </div>
-                </div><!-- End testimonial item -->
-
-                <div class="swiper-slide">
-                    <div class="testimonial-item">
-                        <img src="{% static 'img/testimonials/testimonials-5.jpg' %}" class="testimonial-img" alt="">
-                        <h3>John Larson</h3>
-                        <h4>Entrepreneur</h4>
-                        <p>
-                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                            Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                        </p>
-                    </div>
-                </div><!-- End testimonial item -->
-
-            </div>
-            <div class="swiper-pagination"></div>
+<footer class="pt-2 my-md-2 pt-md-2 border-top">
+    <div class="row">
+        <div class="col-12 col-md text-center">
+            <img class="mb-2" src="{% static 'images/plannerAI/android-chrome-192x192.png' %}" alt="PlannerAI logo"
+                 width="50" height="50">
+            <small class="d-block mb-1 text-muted">Copywrites Planner-AI All rights reserved</small>
+            <small class="text-muted">2022-2023</small>
         </div>
-
+        <div class="col-6 col-md">
+            <h5>Contact</h5>
+            <ul class="list-unstyled text-small">
+                <li><a class="text-muted" href="http://t.me/PlannerAI_bot">Planner AI Telegram bot</a></li>
+            </ul>
+        </div>
+        <div class="col-6 col-md">
+            <h5>Resources</h5>
+            <ul class="list-unstyled text-small">
+                <li><a href="#about" class="text-muted scrollto">About us</a></li>
+                <!--<li><a class="text-muted">Legal info</a></li>-->
+                <!--<li><a class="text-muted" href="https://deem.vercel.app/#our_services">Our services</a></li>-->
+                <!--<li><a class="text-muted" href="https://deem.vercel.app/#contact_us">Contact us</a></li>-->
+            </ul>
+        </div>
+        <div class="col-6 col-md">
+            <h5>Disclamer</h5>
+            <ul class="list-unstyled text-small">
+                <li class="text-muted">
+                    The project is on closed beta-test stage.
+                </li>
+            </ul>
+        </div>
     </div>
-</section><!-- End Testimonials Section -->
-
-<!-- ======= Portfolio Section ======= -->
-<section id="portfolio" class="portfolio">
-    <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-            <h2>Portfolio</h2>
-            <h3>Check our <span>Portfolio</span></h3>
-            <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
-        </div>
-
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-12 d-flex justify-content-center">
-                <ul id="portfolio-flters">
-                    <li data-filter="*" class="filter-active">All</li>
-                    <li data-filter=".filter-app">App</li>
-                    <li data-filter=".filter-card">Card</li>
-                    <li data-filter=".filter-web">Web</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <img src="{% static 'img/portfolio/portfolio-1.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 1</h4>
-                    <p>App</p>
-                    <a href="{% static 'img/portfolio/portfolio-1.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 1"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <img src="{% static 'img/portfolio/portfolio-2.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 3</h4>
-                    <p>Web</p>
-                    <a href="{% static 'img/portfolio/portfolio-2.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 3"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <img src="{% static 'img/portfolio/portfolio-3.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 2</h4>
-                    <p>App</p>
-                    <a href="{% static 'img/portfolio/portfolio-3.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <img src="{% static 'img/portfolio/portfolio-4.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 2</h4>
-                    <p>Card</p>
-                    <a href="{% static 'img/portfolio/portfolio-4.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 2"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <img src="{% static 'img/portfolio/portfolio-5.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 2</h4>
-                    <p>Web</p>
-                    <a href="{% static 'img/portfolio/portfolio-5.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 2"><i class="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-                <img src="{% static 'img/portfolio/portfolio-6.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>App 3</h4>
-                    <p>App</p>
-                    <a href="{% static 'img/portfolio/portfolio-6.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 3"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <img src="{% static 'img/portfolio/portfolio-7.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 1</h4>
-                    <p>Card</p>
-                    <a href="{% static 'img/portfolio/portfolio-7.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 1"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-                <img src="{% static 'img/portfolio/portfolio-8.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Card 3</h4>
-                    <p>Card</p>
-                    <a href="{% static 'img/portfolio/portfolio-8.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 3"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                <img src="{% static 'img/portfolio/portfolio-9.jpg' %}" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                    <h4>Web 3</h4>
-                    <p>Web</p>
-                    <a href="{% static 'img/portfolio/portfolio-9.jpg' %}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 3"><i class="bx bx-plus"></i></a>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</section><!-- End Portfolio Section -->
-
-
-<!-- ======= Frequently Asked Questions Section ======= -->
-<section id="faq" class="faq section-bg">
-    <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-            <h2>F.A.Q</h2>
-            <h3>Frequently Asked <span>Questions</span></h3>
-            <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-xl-10">
-                <ul class="faq-list">
-
-                    <li>
-                        <div data-bs-toggle="collapse" class="collapsed question" href="#faq1">Non consectetur a erat nam at lectus urna duis? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq1" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
-                            </p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div data-bs-toggle="collapse" href="#faq2" class="collapsed question">Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq2" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                            </p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div data-bs-toggle="collapse" href="#faq3" class="collapsed question">Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq3" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
-                            </p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div data-bs-toggle="collapse" href="#faq4" class="collapsed question">Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq4" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
-                            </p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div data-bs-toggle="collapse" href="#faq5" class="collapsed question">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq5" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
-                            </p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div data-bs-toggle="collapse" href="#faq6" class="collapsed question">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
-                        <div id="faq6" class="collapse" data-bs-parent=".faq-list">
-                            <p>
-                                Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
-                            </p>
-                        </div>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
-    </div>
-</section>
-    {% endblock %} <!-- Block about -->
-<!-- ======= Contact Section ======= -->
-{% block contact %}
-    <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-            <h2>Contact</h2>
-            <!-- Alert-Кнопка -->
-            <button class="btn btn-warning" type="button" onclick="alert('I Love Django <3');">Alert Кнопка </button>
-            <button class="btn btn-warning" type="button" onclick="alert('сообщение отправлено')";">Отправить </button>
-            <!-- Alert-Кнопка -->
-            <h3><span>Contact Us</span></h3>
-            <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
-        </div>
-
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-6">
-                <div class="info-box mb-4">
-                    <i class="bx bx-map"></i>
-                    <h3>Our Address</h3>
-                    <p>A108 Adam Street, New York, NY 535022</p>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="info-box  mb-4">
-                    <i class="bx bx-envelope"></i>
-                    <h3>Email Us</h3>
-                    <p>contact@example.com</p>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="info-box  mb-4">
-                    <i class="bx bx-phone-call"></i>
-                    <h3>Call Us</h3>
-                    <p>+1 5589 55488 55</p>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="col-lg-6 ">
-                <iframe class="mb-4 mb-lg-0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" style="border:0; width: 100%; height: 384px;" allowfullscreen></iframe>
-            </div>
-
-            <div class="col-lg-6">
-                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-                    <div class="row">
-                        <div class="col form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="col form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-                    </div>
-                    <div class="my-3">
-                        <div class="loading">Loading</div>
-                        <div class="error-message"></div>
-                        <div class="sent-message">Your message has been sent. Thank you!</div>
-                    </div>
-                    <div class="text-center"><button type="submit">Send Message</button></div>
-                </form>
-            </div>
-
-        </div>
-
-    </div>
-    {% endblock %} <!-- Contact -->
+</footer>
+{% endblock %} <!-- Contact -->
