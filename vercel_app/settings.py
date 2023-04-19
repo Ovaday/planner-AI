@@ -144,7 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 Q_CLUSTER = {
     'name': get_token("Q_CLUSTER_NAME"),
-    'workers': get_token("Q_CLUSTER_WORKERS"),
+    'workers': int(get_token("Q_CLUSTER_WORKERS")),
     'timeout': 60,
     'retry': 90,
     'queue_limit': 100,
