@@ -5,7 +5,7 @@ from telegram import Message
 from helpers.DatabaseHelpers import get_collection_handle, get_db_handle, return_records_list, return_single_record
 
 
-def construct_message(chat_id: int, message_time: any, message_id: int, username: str, message: str,
+def construct_message(chat_id: int, message_time: any, message_id: int, username: str, message: str, tokens_used=None,
                       additional_info=None, external_id=None, classification_results=None):
     if additional_info is None:
         additional_info = {}
@@ -22,6 +22,7 @@ def construct_message(chat_id: int, message_time: any, message_id: int, username
         "username": username,
         "external_id": external_id,
         "additional_info": additional_info,
+        "tokens_used": tokens_used,
         "message_raw": message,
         "message_encrypted": None,
         "response_raw": None,
@@ -40,11 +41,8 @@ def insert_input_message(in_msg: Message, classification_results=None):
 def insert_response(in_msg: Message, response_text: str, tokens_used: int):
     db_handle, mongo_client = get_db_handle()
     coll_handle = get_collection_handle(db_handle, "messages_history")
-    additional_info = {
-        'tokens_used': tokens_used
-    }
     update_query = {"chat_id": in_msg.chat_id, "message_id": in_msg.message_id}
-    new_values = {"$set": {"response_raw": response_text, "additional_info": additional_info}}
+    new_values = {"$set": {"response_raw": response_text, "tokens_used": tokens_used}}
 
     return coll_handle.update_one(update_query, new_values)
 
