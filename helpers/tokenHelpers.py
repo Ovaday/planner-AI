@@ -38,7 +38,8 @@ def get_token(token_name):
             token_value = tokens[str(token_name)]
         return token_value
     except Exception as e:
-        print('Exception: ' + str(e))
+        if token_name != 'VERCEL':
+            print('Exception: ' + str(e))
         return None
 
 
