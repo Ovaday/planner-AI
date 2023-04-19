@@ -3,6 +3,7 @@ from helpers.openAIHelper import *
 from django.test import TestCase
 
 
+# ToDO: add new tests
 class ParseResponseCase(TestCase):
     input_text = "Here is your output: {'is_reminder': True, 'is_event': False}"
     output_parsable_expected = "Here is your output: {'is_reminder': true, 'is_event': false}"
