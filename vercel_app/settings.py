@@ -13,18 +13,22 @@ import os
 from pathlib import Path
 import environ
 
-from helpers.tokenHelpers import get_token
+from helpers.tokenHelpers import get_token, retrieve_and_cache_secrets, get_db_conn
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
+SECRETS = retrieve_and_cache_secrets()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_token("DJANGO_SECRET")
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.eu.ngrok.io']
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '3.72.87.62', get_token("AWS_HOST")]
 
 # Application definition
 
@@ -35,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'example',
+    'website',
     'tg_bot',
+    'django_q',
+    'service_routine'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +60,7 @@ ROOT_URLCONF = 'vercel_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,14 +82,7 @@ WSGI_APPLICATION = 'vercel_app.wsgi.application'
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': get_token("DB_NAME"),
-        'USER': get_token("DB_USER"),
-        'PASSWORD': get_token("DB_PASSWORD"),
-        'HOST': get_token("DB_HOST"),
-        'PORT': '5432',
-    }
+    'default': get_db_conn()
 }
 
 
@@ -117,16 +116,45 @@ USE_I18N = True
 
 USE_TZ = True
 
+import os.path
+import sys
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
-STATIC_ROOT =os.path.join(PROJECT_ROOT,'static')
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
+if get_token("VERCEL"):
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+    MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+    MEDIA_URL = '/media/'
+    STATIC_URL = '/static/'
+
+else:
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+    MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+    MEDIA_URL = '/media/'
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = (
+        os.path.join(PROJECT_ROOT, 'static'),
+    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+Q_CLUSTER = {
+    'name': get_token("Q_CLUSTER_NAME"),
+    'workers': 4,
+    'timeout': 60,
+    'retry': 90,
+    'queue_limit': 100,
+    'attempt_count': 1,
+    'ack_failures': True,
+    'bulk': 5,
+    'sqs': {
+        'aws_region': get_token("IAM_AWS_REGION"),  # optional
+        'aws_access_key_id': get_token("IAM_ACCESS_KEY"),  # optional
+        'aws_secret_access_key': get_token("IAM_SECRET_KEY"),  # optional
+        'receive_message_wait_time_seconds': 20
+    }
+}
