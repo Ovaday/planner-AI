@@ -3,8 +3,8 @@ from typing import Literal
 
 labels = {
     'start':
-        {'russian': 'Спасибо за запуск бота. Я проект разработки @Ovaday.',
-         'english': 'Thank you for starting the bot. I am a development project of @Ovaday.'},
+        {'russian': 'Спасибо за запуск бота. Я проект разработки @plannerAI.',
+         'english': 'Thank you for starting the bot. I am a development project of @plannerAI.'},
     'language_is_set':
         {'russian': 'Установлен русский язык. Для сброса введите /start',
          'english': 'English language is set. To reset, call /start'},
@@ -163,8 +163,8 @@ that was an error. That will improve the bot in your future requests."""
             'english': 'It sounds like you asked me to save something for you, however, I cant save things yet. That will be in future updates. For now I can only set reminders or answer your questions.'},
     'thank_you_for_error':
         {
-            'russian': 'Спасибо что сообщили нам об ошибке! Мы постараемся учесть это в следующих обновлениях. Если это критично, вы можете связаться с создателем бота.',
-            'english': 'Thanks for letting us know about the mistake! We will try to address this in our future updates. If this is critical, you can contact the creator of the bot.'},
+            'russian': 'Спасибо что сообщили нам об ошибке! Мы постараемся учесть это в следующих обновлениях. Если это критично, вы можете связаться с создателем бота @plannerAI.',
+            'english': 'Thanks for letting us know about the mistake! We will try to address this in our future updates. If this is critical, you can contact the creator of the bot @plannerAI.'},
     'it_was_mistake':
         {
             'russian': 'Сообщить об ошибке',
