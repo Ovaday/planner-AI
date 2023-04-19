@@ -1,0 +1,11 @@
+[Unit]
+Description=qcluster runner
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/planner-AI-prod
+ExecStart=/home/ubuntu/planner-AI-prod/virt_env/bin/python manage.py qcluster
+
+[Install]
+WantedBy=multi-user.target
