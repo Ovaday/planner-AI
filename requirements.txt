@@ -26,3 +26,4 @@ jupyterlab_server==2.22.0
 json5==0.9.11
 soundfile
 pymongo
+sentry-sdk

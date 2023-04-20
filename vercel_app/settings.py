@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 from helpers.tokenHelpers import get_token, retrieve_and_cache_secrets, get_db_conn
 
@@ -28,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '3.72.87.62', get_token("AWS_HOST")]
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '3.72.87.62', get_token("AWS_HOST"), '*']
 
 # Application definition
 
@@ -118,6 +121,23 @@ USE_TZ = True
 
 import os.path
 import sys
+
+
+sentry_sdk.init(
+    dsn=get_token("SENTRY_ENDPOINT"),
+    integrations=[
+        DjangoIntegration(),
+    ],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

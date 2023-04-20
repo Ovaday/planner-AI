@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  frontend:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/home/ec2-user/planner-AI/docker
+    networks:
+      - local-planner-network
+    env_file:
+      - .env
+
+networks:
+  local-planner-network:
+    driver: bridge
