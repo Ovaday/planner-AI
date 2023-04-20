@@ -23,6 +23,9 @@ from website import views as example_views
 
 from website.views import TelegramBotView
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/telegram_webhook/', csrf_exempt(TelegramBotView.as_view())),
