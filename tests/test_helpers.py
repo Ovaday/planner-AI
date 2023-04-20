@@ -1,5 +1,7 @@
 import unittest
 
+from asgiref.sync import async_to_sync
+
 from helpers import MessageHistoryHelpers
 from helpers.openAIHelper import *
 from helpers.DatabaseHelpers import *
@@ -120,34 +122,34 @@ class DatabaseHelpersTest(TestCase):
         self.assertIsInstance(record, int)
         self.assertEqual(record, 123)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_get_chat(self):
         chat = await async_get_chat(self.chat_id)
         self.assertIsNotNone(chat)
         self.assertIsInstance(chat, Chat)
         self.assertEqual(chat.chat_id, self.chat_id)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_get_creator(self):
         creator = await async_get_creator()
         self.assertIsNotNone(creator)
         self.assertIsInstance(creator, Chat)
         self.assertEqual(creator.pk, 1)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_set_language(self):
         language = 'fr'
         await async_set_language(self.chat_id, language)
         chat = await async_get_chat(self.chat_id)
         self.assertEqual(chat.language, language)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_set_approved(self):
         await async_set_approved(self.chat_id, True)
         chat = await async_get_chat(self.chat_id)
         self.assertTrue(chat.is_approved)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_tick_counter(self):
         chat = await async_get_chat(self.chat_id)
         prev_counter = chat.counter
@@ -155,7 +157,7 @@ class DatabaseHelpersTest(TestCase):
         chat = await async_get_chat(self.chat_id)
         self.assertEqual(chat.counter, prev_counter + 1)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_tick_tokens(self):
         chat = await async_get_chat(self.chat_id)
         prev_tokens = chat.tokens_used
@@ -164,7 +166,7 @@ class DatabaseHelpersTest(TestCase):
         chat = await async_get_chat(self.chat_id)
         self.assertEqual(chat.tokens_used, prev_tokens + tokens)
 
-    @sync_to_async
+    @async_to_sync
     async def test_async_assign_last_conversation(self):
         conversation = 'test_conversation'
         await async_assign_last_conversation(self.chat_id, conversation)

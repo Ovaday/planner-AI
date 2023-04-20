@@ -28,4 +28,4 @@ class Chat(models.Model):
 
 
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'chat_id', 'counter', 'is_approved', 'expenses', 'money_used']
+    list_display = ['id', 'username', 'chat_id', 'is_approved', 'role', 'language', 'money_used', 'last_conversation']

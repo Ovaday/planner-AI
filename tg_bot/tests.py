@@ -20,12 +20,10 @@ class ChatTestCase(TestCase):
         self.assertEqual(chat2.money_used(), '$ 0.0')  # Ожидаемое значение при counter=0, tokens_used=0
 
         # Изменяем значения полей и проверяем результат
-        chat1.counter = 10
-        chat1.tokens_used = 100
+        chat1.expenses = 10
         chat1.save()
-        chat2.counter = 20
-        chat2.tokens_used = 200
+        chat2.expenses = 0.2
         chat2.save()
 
-        self.assertEqual(chat1.money_used(), '$ 0.002')  # Ожидаемое значение при counter=10, tokens_used=100
-        self.assertEqual(chat2.money_used(), '$ 0.004')
+        self.assertEqual(chat1.money_used(), f'$ {chat1.expenses}')  # Ожидаемое значение при counter=10, tokens_used=100
+        self.assertEqual(chat2.money_used(), f'$ {chat2.expenses}')
