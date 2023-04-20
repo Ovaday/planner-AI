@@ -15,3 +15,4 @@ django-picklefield
 arrow
 blessed
 pymongo
+sentry-sdk
