@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/home/evgenii/PycharmProjects/planner-AI-copy/docker
+      - .:/home/ec2-user/planner-AI/docker
     networks:
       - local-planner-network
     env_file:

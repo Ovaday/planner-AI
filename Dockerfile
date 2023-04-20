@@ -1,7 +1,7 @@
 # base image
 FROM python:3.8
 # setup environment variable
-ENV DockerHOME=/home/evgenii/PycharmProjects/planner-AI-copy/docker
+ENV DockerHOME=/home/ec2-user/planner-AI/docker
 
 # set work directory
 RUN mkdir -p $DockerHOME
