@@ -5,18 +5,19 @@
 
 {% block page_content %}
 
-    <!-- Create your content here. -->
-    <!-- Code below only for you to know how to style and format. -->
+<!-- Create your content here. -->
+<!-- Code below only for you to know how to style and format. -->
 
-    <section id="hero" class="d-flex align-items-center">
-        <div class="container" data-aos="zoom-out" data-aos-delay="100">
-            <h1>Welcome to <span>Planner-AI</span></h1>
-            <br/>
-            <h2>Test content</h2>
-        </div>
-    </section>
-    <div class="chat__container">        <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-        <style>
+<section id="hero" class="d-flex align-items-center">
+    <div class="container" data-aos="zoom-out" data-aos-delay="100">
+        <h1>Welcome to <span>Planner-AI</span></h1>
+        <br />
+        <h2>Test content</h2>
+    </div>
+</section>
+<div class="chat__container">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style>
         body {
             margin-top: 20px;
             background: #ebeef0;
@@ -40,6 +41,19 @@
             height: 50px;
             padding: 0;
             border-bottom: 1px solid #eee;
+        }
+
+
+        textarea {
+            display: block;
+            width: 100%;
+            resize: none;
+        }
+
+        .special__p {
+            width: 100%;
+            text-align: right;
+            margin-top: 12px;
         }
 
         .panel-control {
@@ -223,7 +237,7 @@
             transition: all .7s;
         }
     </style>
-        <div class="container">
+    <div class="container">
         <div class="col-md-12 col-lg-6">
             <div class="panel">
 
@@ -241,7 +255,7 @@
                                 <li class="divider"></li>
                                 <li><a id="demo-connect-chat" href="#" class="disabled-link"
                                         data-target="#demo-chat-body">Connect</a></li>
-                                <li><a id="demo-disconnect-chat" href="#" data-target="#demo-chat-body">Disconect</a>
+                                <li><a id="demo-disconnect-chat" href="#" data-target="#demo-chat-body">Disconnect</a>
                                 </li>
                             </ul>
                         </div>
@@ -383,10 +397,12 @@
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-xs-9">
-                                <input type="text" placeholder="Enter your text" class="form-control chat-input">
+                                <textarea minlength="5" maxlength="1000" id="my-text-area" cols="25" rows="5"
+                                    placeholder="Type your text"></textarea>
+                                <p id="indiсator-p" class="special__p"></p>
                             </div>
                             <div class="col-xs-3">
-                                <button class="btn btn-primary btn-block" type="submit">Send</button>
+                                <button id="btnId" class="btn btn-primary btn-block" type="submit">Send</button>
                             </div>
                         </div>
                     </div>
@@ -397,17 +413,6 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
-        function retrieve_messages(){
-            let retrieveMessages = [
-                "chat_id": 1312441232,
-                "message_time": "noTime",
-                "message_id": "message_id",
-                "is_response": "is_response",
-                "username": "Sanya",
-                "message": "Hello?!",
-        ]
-            return retrieveMessages
-        }
 
     </script>
 </div>
