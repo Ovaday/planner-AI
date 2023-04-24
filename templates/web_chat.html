@@ -402,7 +402,8 @@
                                 <p class="special__p"></p>
                             </div>
                             <div class="col-xs-3">
-                                <button id="btnId" class="btn btn-primary btn-block" type="submit">Send</button>
+                                <button onclick="btnSend()" id="btnId" class="btn btn-primary btn-block"
+                                    type="submit">Send</button>
                             </div>
                         </div>
                     </div>
@@ -418,8 +419,8 @@
             let result = document.querySelector('.special__p');
             const btnId = document.querySelector('#btnId');
 
-            const minLength = 5;
             const limit = 1000;
+
             result.innerText = 0 + '/' + limit;
             myTextarea.addEventListener('input', () => {
                 const textLength = myTextarea.value.length;
@@ -442,7 +443,76 @@
 
             });
         }
-        myValidateTextarea()
+        myValidateTextarea();
+        // Функция на ретрив
+        function retrieveMassages() {
+            const messages = [
+
+                {
+                    chat_id: "chat_3",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                }, {
+                    chat_id: "chat_2",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                },
+                {
+                    chat_id: "chat_1",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                },
+                {
+                    chat_id: "chat_1",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                }, {
+                    chat_id: "chat_1",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                }, {
+                    chat_id: "chat_1",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                }, {
+                    chat_id: "chat_1",
+                    message_time: new Date("2022-04-20T14:50:00"),
+                    message_id: "message_2",
+                    is_response: true,
+                    username: "Bob",
+                    message: "Привет, все хорошо, спасибо. А у тебя?"
+                }
+
+
+
+
+
+            ]
+        }
+        //Функция на кнопку
+        function btnSend() {
+            let myTextareaValue = document.querySelector('.my-text-area').value;
+            console.log(myTextareaValue);
+        };
+
 
     </script>
 </div>
