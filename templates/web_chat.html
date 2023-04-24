@@ -16,7 +16,7 @@
     </div>
 </section>
 <div class="chat__container">
-    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             margin-top: 20px;
@@ -397,9 +397,9 @@
                     <div class="panel-footer">
                         <div class="row">
                             <div class="col-xs-9">
-                                <textarea minlength="5" maxlength="1000" id="my-text-area" cols="25" rows="5"
+                                <textarea class="my-text-area" cols="25" rows="5"
                                     placeholder="Type your text"></textarea>
-                                <p id="indiсator-p" class="special__p"></p>
+                                <p class="special__p"></p>
                             </div>
                             <div class="col-xs-3">
                                 <button id="btnId" class="btn btn-primary btn-block" type="submit">Send</button>
@@ -410,9 +410,39 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
     <script>
+        // VALIDATION FUNCTION
+        function myValidateTextarea() {
+            let myTextarea = document.querySelector('.my-text-area');
+            let result = document.querySelector('.special__p');
+            const btnId = document.querySelector('#btnId');
+
+            const minLength = 5;
+            const limit = 1000;
+            result.innerText = 0 + '/' + limit;
+            myTextarea.addEventListener('input', () => {
+                const textLength = myTextarea.value.length;
+                result.textContent = textLength + '/' + limit;
+
+                if (textLength > limit) {
+                    myTextarea.style.borderColor = '#ff2581';
+                    result.style.color = '#ff2581';
+                    btnId.disabled = true;
+                }
+                else {
+                    myTextarea.style.borderColor = 'black';
+                    result.style.color = 'black'
+                    btnId.disabled = false;
+                }
+
+
+
+
+
+            });
+        }
+        myValidateTextarea()
 
     </script>
 </div>
