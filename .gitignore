@@ -4,8 +4,8 @@
 __pycache__
 db.sqlite3
 media
-
-# Environments 
+# Environments
+# Environments
 *.env
 .env.*
 .venv 
