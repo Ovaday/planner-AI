@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views import View
 
 from tg_routine.main import telegram_async_handler
-
+from helpers.MessageHistoryHelpers import get_last_user_messages
 
 # Endpoint to retrieve the index page
 def index(request):
@@ -40,8 +40,15 @@ def get_messages(request, *args, **kwargs):
         return Http401()
     if request.method == "GET":
 
+        record_list = get_last_user_messages(user_id)
+        if record_list:
+            for data in record_list:
+                print(record_list[data])
+        else:
+            print('not ok')
         # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
         # ToDo Anastasia: Include case when there are no messages.
+
         # You should return list with the following format:
         messages = [{
             "chat_id": 'chat_id',
