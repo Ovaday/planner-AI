@@ -43,7 +43,8 @@ def get_messages(request, *args, **kwargs):
         record_list = get_last_user_messages(user_id)
         if record_list:
             for data in record_list:
-                print(record_list[data])
+                for item in data.items():
+                    print(item)
         else:
             print('not ok')
         # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
