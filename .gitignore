@@ -5,6 +5,7 @@ __pycache__
 db.sqlite3
 media
 # Environments
+# added comment
 *.env
 .env.*
 .venv 
