@@ -59,6 +59,8 @@ def get_messages(request, *args, **kwargs):
                 messages_list.append(message)
             json_string = json.dumps(messages_list,  ensure_ascii=False, indent=4,  sort_keys=True, default=str)
             return JsonResponse ({"messages": json_string})
+        else:
+            return messages_list
         # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
         # ToDo Anastasia: Include case when there are no messages.
 
