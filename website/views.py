@@ -41,28 +41,39 @@ def get_messages(request, *args, **kwargs):
     if request.method == "GET":
 
         record_list = get_last_user_messages(user_id)
-        if record_list:
-            for data in record_list:
-                for item in data.items():
-                    print(item)
-        else:
-            print('not ok')
-        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
-        # ToDo Anastasia: Include case when there are no messages.
-
-        # You should return list with the following format:
-        messages = [{
+        json_template = {
             "chat_id": 'chat_id',
             "message_time": 'message_time',
             "message_id": 'message_id',
             "username": 'username',
-            "message": 'message',
-            "response": 'response'
-            }, ]
-        # To test, launch the server and open page:
-        # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
+            "message_raw": 'message',
+            "response_raw": 'response'
+        }
+        messages_list = []
+        if record_list:
+            for data in record_list:
+                message = {}
+                for item in data:
+                    if item in json_template:
+                        message[item] = data[item]
+                messages_list.append(message)
+            return JsonResponse ({"messages": messages_list})
+        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
+        # ToDo Anastasia: Include case when there are no messages.
 
-        return JsonResponse({"messages": messages})
+        # # You should return list with the following format:
+        # messages = [{
+        #     "chat_id": 'chat_id',
+        #     "message_time": 'message_time',
+        #     "message_id": 'message_id',
+        #     "username": 'username',
+        #     "message": 'message',
+        #     "response": 'response'
+        #     }, ]
+        # # To test, launch the server and open page:
+        # # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
+        #
+        # # return JsonResponse({"messages": messages})
     else:
         return error_404_view(request)
 
