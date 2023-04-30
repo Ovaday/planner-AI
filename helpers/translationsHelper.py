@@ -169,6 +169,10 @@ that was an error. That will improve the bot in your future requests."""
         {
             'russian': 'Сообщить об ошибке',
             'english': 'Report an error'},
+    'list_users_balance_command':
+        {
+            'russian': '/admin_users_balance - возвращает баланс всех пользователей',
+            'english': '/admin_users_balance - returns the balance of all users'},
 }
 
 _TYPES = Literal[
@@ -210,13 +214,14 @@ _TYPES = Literal[
     'appointment_request_type',
     'save_request_type',
     'thank_you_for_error',
-    'it_was_mistake'
+    'it_was_mistake',
+    'list_users_balance_command',
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']
 
 
-def get_label(name: _TYPES, language: _LANGUAGE_TYPES):
+def get_label(name: _TYPES, language: _LANGUAGE_TYPES = "english"):
     return labels.get(name).get(language)
 
 
