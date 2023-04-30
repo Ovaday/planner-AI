@@ -45,7 +45,7 @@ def get_messages(request, *args, **kwargs):
     if request.method == "GET":
 
         record_list = get_last_user_messages(user_id)
-        json_template = {
+        output_template = {
             "chat_id": 'chat_id',
             "message_time": 'message_time',
             "message_id": 'message_id',
@@ -58,15 +58,14 @@ def get_messages(request, *args, **kwargs):
             for data in record_list:
                 message = {}
                 for item in data:
-                    if item in json_template:
+                    if item in output_template:
                         message[item] = data[item]
                 messages_list.append(message)
             json_string = json.dumps(messages_list, ensure_ascii=False, indent=4, sort_keys=True, default=str)
             return JsonResponse({"messages": json_string})
         else:
             return messages_list
-        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
-        # ToDo Anastasia: Include case when there are no messages.
+
 
     else:
         return error_404_view(request)
@@ -88,11 +87,12 @@ def insert_message(request, *args, **kwargs):
     if user_id > 0:
         requests.post(user_id)
         if 5 <= len(message) <= 1000:
-            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username), message=message, additional_info=None, external_id=None, classification_results=None)
+            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username),
+                                     message=message, additional_info=None, external_id=None,
+                                     classification_results=None)
             insert_web_message(data)
 
     return JsonResponse({"ok": "GET request processed"})
-
 
 
 def error_404_view(request):
