@@ -1,3 +1,4 @@
+import datetime
 import logging, json
 
 import requests
@@ -67,19 +68,6 @@ def get_messages(request, *args, **kwargs):
         # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
         # ToDo Anastasia: Include case when there are no messages.
 
-        # # You should return list with the following format:
-        # messages = [{
-        #     "chat_id": 'chat_id',
-        #     "message_time": 'message_time',
-        #     "message_id": 'message_id',
-        #     "username": 'username',
-        #     "message": 'message',
-        #     "response": 'response'
-        #     }, ]
-        # # To test, launch the server and open page:
-        # # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
-        #
-        # # return JsonResponse({"messages": messages})
     else:
         return error_404_view(request)
 
@@ -96,13 +84,15 @@ def get_messages(request, *args, **kwargs):
 def insert_message(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
     message = kwargs.get('message')
+    username = kwargs.get('username')
     if user_id > 0:
         requests.post(user_id)
         if 5 <= len(message) <= 1000:
-            insert_web_message(message)
+            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username), message=message, additional_info=None, external_id=None, classification_results=None)
+            insert_web_message(data)
 
-    response = requests.get()
-    print(request)
+    return JsonResponse({"ok": "GET request processed"})
+
 
 
 def error_404_view(request):
