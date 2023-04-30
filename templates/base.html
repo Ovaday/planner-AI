@@ -38,6 +38,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
+    {% block styles %}{% endblock %}
 </head>
 
 <body>
@@ -52,9 +53,9 @@
         {% block header %}{% endblock %}
     </header>
 
-    <section id="chat" class="d-flex align-items-center">
+    <section id="hero" class="d-flex align-items-center">
         {% block landing %}{% endblock %}
-        {% block styles %}{% endblock %}
+
 
     </section>
 
