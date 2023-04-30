@@ -1,10 +1,13 @@
 import logging, json
+
+import requests
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views import View
 
 from tg_routine.main import telegram_async_handler
-from helpers.MessageHistoryHelpers import get_last_user_messages
+from helpers.MessageHistoryHelpers import get_last_user_messages, insert_web_message, construct_message
+
 
 # Endpoint to retrieve the index page
 def index(request):
@@ -57,8 +60,8 @@ def get_messages(request, *args, **kwargs):
                     if item in json_template:
                         message[item] = data[item]
                 messages_list.append(message)
-            json_string = json.dumps(messages_list,  ensure_ascii=False, indent=4,  sort_keys=True, default=str)
-            return JsonResponse ({"messages": json_string})
+            json_string = json.dumps(messages_list, ensure_ascii=False, indent=4, sort_keys=True, default=str)
+            return JsonResponse({"messages": json_string})
         else:
             return messages_list
         # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
@@ -91,6 +94,14 @@ def get_messages(request, *args, **kwargs):
 # No need to test if that works right now. We will check it later.
 
 def insert_message(request, *args, **kwargs):
+    user_id = kwargs.get('user_id')
+    message = kwargs.get('message')
+    if user_id > 0:
+        requests.post(user_id)
+        if 5 <= len(message) <= 1000:
+            insert_web_message(message)
+
+    response = requests.get()
     print(request)
 
 
