@@ -78,7 +78,7 @@ def get_messages(request, *args, **kwargs):
 #  length (minimum - 5, max - 1000). In addition, there should be non-null user_id.
 #  To insert, use methods from the same helper, construct_message and insert_web_message.
 #  As a result return JSON with response 200 - ok (google how it should look like.)
-# No need to test if that works right now. We will check it later.
+
 
 def insert_message(request, *args, **kwargs):
     user_id = kwargs.get('user_id')
@@ -87,12 +87,11 @@ def insert_message(request, *args, **kwargs):
     if user_id > 0:
         requests.post(user_id)
         if 5 <= len(message) <= 1000:
-            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username),
-                                     message=message, additional_info=None, external_id=None,
-                                     classification_results=None)
+            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username), message=message, additional_info=None, external_id=None, classification_results=None)
             insert_web_message(data)
 
     return JsonResponse({"ok": "GET request processed"})
+
 
 
 def error_404_view(request):
