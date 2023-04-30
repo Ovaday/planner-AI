@@ -81,7 +81,7 @@ def get_messages(request, *args, **kwargs):
 
 
 def insert_message(request, *args, **kwargs):
-    user_id = kwargs.get('user_id')
+    user_id = int(kwargs.get('user_id'))
     message = kwargs.get('message')
     username = kwargs.get('username')
     if user_id > 0:
