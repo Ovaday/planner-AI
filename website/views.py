@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views import View
 
+from tg_routine.commandHelpers import *
 from tg_routine.main import telegram_async_handler
 
 
@@ -50,7 +51,7 @@ def get_messages(request, *args, **kwargs):
             "username": 'username',
             "message": 'message',
             "response": 'response'
-            }, ]
+        }, ]
         # To test, launch the server and open page:
         # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
 
@@ -70,6 +71,17 @@ def get_messages(request, *args, **kwargs):
 
 def insert_message(request, *args, **kwargs):
     print(request)
+
+
+# Endpoint to test your functions
+def test_endpoint(request, *args, **kwargs):
+    if request.method == "GET":
+        results = all_users_balance_helper() # ToDo: for test purposes only change here.
+        # response, chat_id = write_specific_helper(message, from_label, chat_id=12345) # ToDo: use if there are multiple outputs
+        print(results)
+        return JsonResponse({"test": results})
+    else:
+        return error_404_view(request)
 
 
 def error_404_view(request):
