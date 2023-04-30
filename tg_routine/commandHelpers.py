@@ -18,7 +18,7 @@ def user_balance_helper(chat=None, chat_id=None):
     amount = init_balance - expenses  # ToDo: Fix to display only 2 digits after the comma.
 
     response = f'Your balance is: $ {amount}'
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py
+    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
 
     return response, amount
 
@@ -35,7 +35,7 @@ def all_users_balance_helper():
     amount = init_balance - all_expenses  # ToDo: Fix to display only 2 digits after the comma.
 
     response = f'Balance of all users is: $ {amount}'
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py
+    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
 
     return response
 
@@ -43,7 +43,7 @@ def all_users_balance_helper():
 def list_users_helper():
     # ToDO #116: Retrieve all users - their usernames, status and balance.
 
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py
+    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
     response = f"""All user's list:
 """
 
@@ -68,7 +68,7 @@ def list_users_helper():
 
 def list_admin_commands_helper():
     # ToDO #116: List all admin commands.
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py
+    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
     response = f"""Admin commands:
 """
     admin_commands = [
@@ -97,6 +97,6 @@ def write_specific_helper(message: str, from_label: str, chat=None, chat_id=None
 
     response = f"""Message from {from_label}:
 {message}"""
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py
+    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
 
     return response, chat_id
