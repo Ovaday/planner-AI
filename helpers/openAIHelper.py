@@ -65,9 +65,9 @@ async def chatGPT_req(message, tg_chat, type: _TYPES, model='gpt-3.5-turbo', ini
         system_content = f"""Important: Provide ONLY the requested form in the output and no other text!!!"""
 
     messages = [
-            {"role": "system", "content": system_content},
-            {"role": "user", "content": message}
-        ]
+        {"role": "system", "content": system_content},
+        {"role": "user", "content": message}
+    ]
     if examples and len(examples) > 0:
         messages.append(examples)
     chatgpt_response = openai.ChatCompletion.create(
@@ -99,6 +99,7 @@ def parse_response(response, tg_chat, words_limit, type, initial_text):
     else:
         return message
 
+
 def parse_reminder_probability(text):
     return_val = parse_json(text)
     if 'reminder_probability' in return_val:
@@ -110,15 +111,14 @@ def parse_reminder_probability(text):
     else:
         return 5
 
+
 def parse_json(text):
     pattern = r"{.*}"
     json_dict = {}
     text = "{" + text.split("{", 1)[1]  # remove the text before the JSON
-    text = text.split("}", 1)[0] + "}" # remove the text after the JSON
+    text = text.split("}", 1)[0] + "}"  # remove the text after the JSON
     text = text.replace("\'", "\"")
     text = replace_bools(text)
-    print(text)
-    print(type(text))
     try:
         return json.loads(text)
     except Exception as e:
@@ -130,6 +130,7 @@ def parse_json(text):
         json_dict = json.loads(matches[0])
         print(json_dict)
     return json_dict
+
 
 def replace_bools(text):
     return text.replace('True', 'true').replace('False', 'false')
