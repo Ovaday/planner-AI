@@ -5,16 +5,11 @@ from helpers.translationsHelper import get_day
 from tg_routine.templates import *
 
 
-async def check_is_chat_approved(chat, context, message=None):
-    unapproved_label = get_label('wait_till_approved', chat.language)
+async def check_is_chat_approved(chat, context, message):
     if not chat.is_approved:
-        if message:
-            await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat.chat_id,
-                                           text=unapproved_label)
-            return False
-        else:
-            await context.bot.send_message(rchat_id=chat.chat_id, text=unapproved_label)
-            return False
+        await context.bot.send_message(reply_to_message_id=message.message_id, chat_id=chat.chat_id,
+                                       text=get_label('wait_till_approved', chat.language))
+        return False
     return True
 
 
@@ -77,5 +72,5 @@ async def resolve_main_params(update: Update):
     print(message)
     chat_id = update.effective_chat.id
 
-    chat = await async_get_chat(chat_id, update)
+    chat = await async_get_chat(chat_id)
     return message, chat_id, chat

@@ -29,8 +29,7 @@ urlpatterns = [
     path('chat/', website_views.chat_page, name='chat_page'),
     path("api/messages/<int:user_id>", website_views.get_messages),
     path("api/messages/", website_views.insert_message),
-    path("test/", website_views.test_endpoint),
-    path('api/telegram_webhook/', csrf_exempt(TelegramBotView.as_view())),
+    path('api/telegram_webhook', csrf_exempt(TelegramBotView.as_view())),
     path('', include("django.contrib.auth.urls")),
 ]
 

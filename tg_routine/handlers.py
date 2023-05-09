@@ -1,11 +1,9 @@
-import json
-
 from django_q.tasks import async_task
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import ContextTypes
 
 from helpers.DatabaseHelpers import *
-from helpers.LoggingHelpers import async_insert_log
+from helpers.MessageHistoryHelpers import async_get_last_user_messages, async_insert_input_message
 from tg_routine.serviceHelpers import *
 
 
@@ -35,16 +33,9 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                            reply_markup=reply_markup)
         else:
             await async_set_approved(chat.chat_id, False)
-            keyboard = [
-                [InlineKeyboardButton(get_label('it_was_mistake', chat.language), callback_data=f'error_{chat_id}'), ]]
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language), reply_markup=reply_markup)
+            await context.bot.send_message(chat_id=chat.chat_id, text=get_label('account_is_declined', chat.language))
 
         await context.bot.send_message(chat_id=creator.chat_id, text=choice[:7] + 'd')
-    elif choice[:5] == 'error':
-        await async_insert_log(json.loads(update.to_json()), 'button', chat_id=chat_id)
-        chat = await async_get_chat(choice[6:])
-        await query.edit_message_text(text=f"{get_label('thank_you_for_error', chat.language)}")
 
 
 async def timeout(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -105,7 +96,7 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             else:
                 await async_assign_last_conversation(chat_id, message.text)
                 print('Invoke AWS EC2')
-                async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={'type': 'tg_message'})
+                async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})
 
 
 async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -119,4 +110,4 @@ async def audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     else:
         print('process_voice_message')
-        async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={'type': 'tg_message'})
+        async_task('helpers.SQSHelpers.task_receiver', update.to_json(), kwargs={})

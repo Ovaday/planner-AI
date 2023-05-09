@@ -18,8 +18,8 @@ python manage.py runserver
 
 **On Linux**
 ```bash
-python3 -m venv virt_env
-source ./virt_env/bin/activate
+python -m venv virt_env
+./virt_env/bin/activate
 pip install -r requirements.txt
-python3 manage.py runserver
+python manage.py runserver
 ```

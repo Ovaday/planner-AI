@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_token("DEBUG_MODE")
 
-ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '3.72.87.62', get_token("AWS_HOST")]
+ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', '.eu.ngrok.io', '.ngrok-free.app', '3.72.87.62', get_token("AWS_HOST")]
 
 # Application definition
 
@@ -143,7 +143,7 @@ else:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 Q_CLUSTER = {
-    'name': get_token("Q_CLUSTER_NAME"),
+    'name': 'django-sqs-dev',
     'workers': 4,
     'timeout': 60,
     'retry': 90,
@@ -152,7 +152,7 @@ Q_CLUSTER = {
     'ack_failures': True,
     'bulk': 5,
     'sqs': {
-        'aws_region': get_token("IAM_AWS_REGION"),  # optional
+        'aws_region': get_token("AWS_REGION"),  # optional
         'aws_access_key_id': get_token("IAM_ACCESS_KEY"),  # optional
         'aws_secret_access_key': get_token("IAM_SECRET_KEY"),  # optional
         'receive_message_wait_time_seconds': 20

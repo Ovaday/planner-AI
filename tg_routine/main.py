@@ -1,7 +1,5 @@
 from django.http import JsonResponse
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
-
-from helpers.LoggingHelpers import async_insert_log
 from helpers.tokenHelpers import get_token
 from tg_routine.commandHandlers import *
 from tg_routine.handlers import start, echo, button, timeout, audio
@@ -36,11 +34,6 @@ async def main(event):
         application.add_handler(reminder_handler)
         application.add_handler(my_reminders_handler)
 
-        #"list_users_balance_command",  # /admin_users_balance
-        #"list_users_command",  # /admin_list_users
-        #"list_admin_commands",  # /admin_commands
-        #"write_specific",  # /admin_write
-
         message_non_specific_handler = MessageHandler(filters.COMMAND, message_specific)
         application.add_handler(message_non_specific_handler)
 
@@ -53,7 +46,6 @@ async def main(event):
 
     except Exception as exc:
         print(exc)
-        await async_insert_log(exc, 'main', chat_id=event['message']['from']['id'])
         return JsonResponse(status=500, data={"nok": "POST request failed"})
 
 
@@ -74,9 +66,6 @@ async def main_wrapper(event, is_fictious=False):
                                                                  'entities': [{'offset': 0, 'length': 8,
                                                                                'type': 'bot_command'}]}}
         return await asyncio.wait_for(main(my_event), timeout=0.2)
-    except Exception as e:
-        await async_insert_log(e, 'main_wrapper', chat_id=event['message']['from']['id'])
-        return JsonResponse(status=500, data={"nok": "POST request failed"})
 
 
 def telegram_async_handler(event):
