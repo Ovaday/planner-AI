@@ -81,17 +81,20 @@ def get_messages(request, *args, **kwargs):
 
 
 def insert_message(request, *args, **kwargs):
-    user_id = int(kwargs.get('user_id'))
-    message = kwargs.get('message')
-    username = kwargs.get('username')
-    if user_id > 0:
-        requests.post(user_id)
-        if 5 <= len(message) <= 1000:
-            data = construct_message(user_id, message_time=datetime.date.today(), message_id=1, username=str(username), message=message, additional_info=None, external_id=None, classification_results=None)
-            insert_web_message(data)
-
-    return JsonResponse({"ok": "GET request processed"})
-
+    if 'user_id' in kwargs:
+        user_id = int(kwargs.get('user_id'))
+        message = kwargs.get('message')
+        username = kwargs.get('username')
+        if user_id > 0:
+            requests.post(user_id)
+            if 5 <= len(message) <= 1000:
+                data = construct_message(user_id, message_time=datetime.date.today(), message_id=1,
+                                         username=str(username), message=message, additional_info=None,
+                                         external_id=None, classification_results=None)
+                insert_web_message(data)
+        return JsonResponse({"ok": "GET request processed"})
+    else:
+        return error_404_view(request)
 
 
 def error_404_view(request):
