@@ -173,6 +173,12 @@ that was an error. That will improve the bot in your future requests."""
         {
             'russian': '/admin_users_balance - возвращает баланс всех пользователей',
             'english': '/admin_users_balance - returns the balance of all users'},
+    'user_balance': {
+        'russian': 'Ваш баланс',
+        'english': 'Your balance is'},
+    'all_user_balance': {
+        'russian': 'Баланс всех пользователей',
+        'english': 'Balance of all users is', }
 }
 
 _TYPES = Literal[
@@ -216,6 +222,8 @@ _TYPES = Literal[
     'thank_you_for_error',
     'it_was_mistake',
     'list_users_balance_command',
+    'user_balance',
+    'all_user_balance',
 ]
 
 _LANGUAGE_TYPES = Literal['english', 'russian']

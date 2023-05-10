@@ -3,24 +3,24 @@ from tg_bot.models import Chat
 
 
 def user_balance_helper(chat=None, chat_id=None):
-    # ToDO #115: Add code to retrieve user's balance.
-    # ToDo: If both chat and user's id are none, raise error
-
+    if chat is None and chat_id is None:
+        raise Exception("You haven't any balance")
     if not chat:
         chat = Chat.objects.filter(chat_id=chat_id)
 
-    # Use 'chat' object to get values from its properties. /tg_bot/models.py/Chat
+        # Use 'chat' object to get values from its properties. /tg_bot/models.py/Chat
 
-    # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
-    # negative value.
-    init_balance = 0
-    expenses = 10.1  # ToDo: Change.
-    amount = init_balance - expenses  # ToDo: Fix to display only 2 digits after the comma.
+        # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
+        # negative value.
+        init_balance = 0
+        expenses = 10.1  # ToDo: Change.
+        amount = "{:.2f}".format(init_balance - expenses)
 
-    response = f'Your balance is: $ {amount}'
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
+        response_descr = get_label('user_balance')
+        response = f'Your balance is: $ {amount}'
+        # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
 
-    return response, amount
+        return response, amount
 
 
 def all_users_balance_helper():
@@ -32,9 +32,11 @@ def all_users_balance_helper():
     # ToDo: Iterate over users, sum all their expenses into all_expenses and display as a negative value.
     init_balance = 0
     all_expenses = 10.1  # ToDo: Change.
-    amount = init_balance - all_expenses  # ToDo: Fix to display only 2 digits after the comma.
+    amount = "{:.2f}".format(init_balance - all_expenses)
 
-    response = f'Balance of all users is: $ {amount}'
+    response_descr = get_label('all_user_balance')
+
+    response = f'{response_descr}: $ {amount}'
     # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
 
     return response
