@@ -7,20 +7,23 @@ def user_balance_helper(chat=None, chat_id=None):
         raise Exception("You haven't any balance")
     if not chat:
         chat = Chat.objects.filter(chat_id=chat_id)
+        for user in chat:
+            expenses = user.expenses
+            language = user.language
 
-        # Use 'chat' object to get values from its properties. /tg_bot/models.py/Chat
+            # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
+            # negative value.
+            init_balance = 0
+            amount = "{:.2f}".format(init_balance - expenses)
 
-        # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
-        # negative value.
-        init_balance = 0
-        expenses = 10.1  # ToDo: Change.
-        amount = "{:.2f}".format(init_balance - expenses)
+            if language == 'russian':
+                response_descr = get_label('user_balance')
+                response = f'{response_descr}: $ {amount}'
+            elif language == 'english':
+                response_descr = get_label('user_balance')
+                response = f'{response_descr}: $ {amount}'
 
-        response_descr = get_label('user_balance')
-        response = f'Your balance is: $ {amount}'
-        # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
-
-        return response, amount
+            return response, amount
 
 
 def all_users_balance_helper():
