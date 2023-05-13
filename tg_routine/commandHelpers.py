@@ -98,5 +98,5 @@ def write_specific_helper(message: str, from_label: str, chat=None, chat_id=None
     response = f"""Message from {from_label}:
 {message}"""
     # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
-
+    print(response)
     return response, chat_id
