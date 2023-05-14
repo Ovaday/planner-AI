@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views import View
 
-from tg_routine.commandHelpers import *
+from tg_routine.commandHelpers import write_specific_helper
+from tg_routine.commandHelpers import all_users_balance_helper
 from tg_routine.main import telegram_async_handler
 from helpers.MessageHistoryHelpers import get_last_user_messages, insert_web_message, construct_message
 
@@ -101,7 +102,7 @@ def insert_message(request, *args, **kwargs):
 def test_endpoint(request, *args, **kwargs):
     if request.method == "GET":
         results = all_users_balance_helper() # ToDo: for test purposes only change here.
-        # response, chat_id = write_specific_helper(message, from_label, chat_id=12345) # ToDo: use if there are multiple outputs
+        result, chat_id = write_specific_helper("message", "from_label", chat_id=12345) # ToDo: use if there are multiple outputs
         print(results)
         return JsonResponse({"test": results})
     else:
