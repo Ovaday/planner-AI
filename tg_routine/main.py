@@ -36,6 +36,11 @@ async def main(event):
         application.add_handler(reminder_handler)
         application.add_handler(my_reminders_handler)
 
+        #"list_users_balance_command",  # /admin_users_balance
+        #"list_users_command",  # /admin_list_users
+        #"list_admin_commands",  # /admin_commands
+        #"write_specific",  # /admin_write
+
         message_non_specific_handler = MessageHandler(filters.COMMAND, message_specific)
         application.add_handler(message_non_specific_handler)
 

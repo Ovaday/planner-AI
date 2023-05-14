@@ -6,6 +6,7 @@ class Chat(models.Model):
     chat_id = models.CharField(max_length=300)
     counter = models.IntegerField(default=0)
     tokens_used = models.IntegerField(default=0)
+    whisper_tokens = models.FloatField(default=0)
     expenses = models.FloatField(default=0)
 
     is_approved = models.BooleanField(default=False)
@@ -28,4 +29,4 @@ class Chat(models.Model):
 
 
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ['id', 'username', 'chat_id', 'is_approved', 'role', 'language', 'money_used', 'last_conversation']
+    list_display = ['id', 'username', 'chat_id', 'is_approved', 'role', 'language', 'money_used', 'last_conversation', "whisper_tokens"]
