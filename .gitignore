@@ -4,8 +4,7 @@
 __pycache__
 db.sqlite3
 media
-
-# Environments 
+# Environments
 *.env
 .env.*
 .venv 
@@ -16,7 +15,3 @@ env.bak/
 venv.bak/
 .idea/
 virt_env/
-resources/extracted/
-*-checkpoint.ipynb
-.ipynb_checkpoints/
-personal/
