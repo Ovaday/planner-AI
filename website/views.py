@@ -1,10 +1,14 @@
+import datetime
 import logging, json
+
+import requests
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.views import View
 
 from tg_routine.commandHelpers import *
 from tg_routine.main import telegram_async_handler
+from helpers.MessageHistoryHelpers import get_last_user_messages, insert_web_message, construct_message
 
 
 # Endpoint to retrieve the index page
@@ -41,21 +45,28 @@ def get_messages(request, *args, **kwargs):
         return Http401()
     if request.method == "GET":
 
-        # ToDo Anastasia: Retrieve here messages for the user with helpers.MessageHistoryHelpers.get_last_user_messages()
-        # ToDo Anastasia: Include case when there are no messages.
-        # You should return list with the following format:
-        messages = [{
+        record_list = get_last_user_messages(user_id)
+        output_template = {
             "chat_id": 'chat_id',
             "message_time": 'message_time',
             "message_id": 'message_id',
             "username": 'username',
-            "message": 'message',
-            "response": 'response'
-        }, ]
-        # To test, launch the server and open page:
-        # http://127.0.0.1:8000/api/messages/1    (1 is fictive user_id)
+            "message_raw": 'message',
+            "response_raw": 'response'
+        }
+        messages_list = []
+        if record_list:
+            for data in record_list:
+                message = {}
+                for item in data:
+                    if item in output_template:
+                        message[item] = data[item]
+                messages_list.append(message)
+            json_string = json.dumps(messages_list, ensure_ascii=False, indent=4, sort_keys=True, default=str)
+            return JsonResponse({"messages": json_string})
+        else:
+            return messages_list
 
-        return JsonResponse({"messages": messages})
     else:
         return error_404_view(request)
 
@@ -67,10 +78,23 @@ def get_messages(request, *args, **kwargs):
 #  length (minimum - 5, max - 1000). In addition, there should be non-null user_id.
 #  To insert, use methods from the same helper, construct_message and insert_web_message.
 #  As a result return JSON with response 200 - ok (google how it should look like.)
-# No need to test if that works right now. We will check it later.
+
 
 def insert_message(request, *args, **kwargs):
-    print(request)
+    if 'user_id' in kwargs:
+        user_id = int(kwargs.get('user_id'))
+        message = kwargs.get('message')
+        username = kwargs.get('username')
+        if user_id > 0:
+            requests.post(user_id)
+            if 5 <= len(message) <= 1000:
+                data = construct_message(user_id, message_time=datetime.date.today(), message_id=1,
+                                         username=str(username), message=message, additional_info=None,
+                                         external_id=None, classification_results=None)
+                insert_web_message(data)
+        return JsonResponse({"ok": "GET request processed"})
+    else:
+        return error_404_view(request)
 
 
 # Endpoint to test your functions
