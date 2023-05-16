@@ -3,41 +3,48 @@ from tg_bot.models import Chat
 
 
 def user_balance_helper(chat=None, chat_id=None):
-    # ToDO #115: Add code to retrieve user's balance.
-    # ToDo: If both chat and user's id are none, raise error
-
+    if chat is None and chat_id is None:
+        raise Exception("You haven't any balance")
     if not chat:
+        response_descr = 0
         chat = Chat.objects.filter(chat_id=chat_id)
+        for user in chat:
+            expenses = user.expenses
+            language = user.language
 
-    # Use 'chat' object to get values from its properties. /tg_bot/models.py/Chat
+            # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
+            # negative value.
+            init_balance = 0
+            amount = "{:.2f}".format(init_balance - expenses)
 
-    # Consider that right now we don't have a balance, but only user's expenses, so you have to display a balance as a
-    # negative value.
-    init_balance = 0
-    expenses = 10.1  # ToDo: Change.
-    amount = init_balance - expenses  # ToDo: Fix to display only 2 digits after the comma.
+            if language == 'russian':
+                response_descr = get_label('user_balance', language)
+            elif language == 'english':
+                response_descr = get_label('user_balance', language)
+            response = f'{response_descr}: $ {amount}'
 
-    response = f'Your balance is: $ {amount}'
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
-
-    return response, amount
+            return response, amount
 
 
 def all_users_balance_helper():
-    # ToDO #115: Add code to retrieve all users balance.
 
+    response_descr = 0
     chat_list = Chat.objects.all()
+    all_expenses = 0
+    for chat in chat_list:
+        expenses = chat.expenses
+        language = chat.language
+        all_expenses += expenses
+        init_balance = 0
+        amount = "{:.2f}".format(init_balance - all_expenses)
 
-    # What you'll need to do:
-    # ToDo: Iterate over users, sum all their expenses into all_expenses and display as a negative value.
-    init_balance = 0
-    all_expenses = 10.1  # ToDo: Change.
-    amount = init_balance - all_expenses  # ToDo: Fix to display only 2 digits after the comma.
+        if language == 'russian':
+            response_descr = get_label('user_balance', language)
+        elif language == 'english':
+            response_descr = get_label('user_balance', language)
+        response = f'{response_descr}: $ {amount}'
 
-    response = f'Balance of all users is: $ {amount}'
-    # ToDo: use labels, add english and russian translations with appropriate label to /helpers/translationHelper.py. Use get_label("text")
-
-    return response
+        return response
 
 
 def list_users_helper():

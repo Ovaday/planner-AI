@@ -100,7 +100,7 @@ def insert_message(request, *args, **kwargs):
 # Endpoint to test your functions
 def test_endpoint(request, *args, **kwargs):
     if request.method == "GET":
-        results = all_users_balance_helper() # ToDo: for test purposes only change here.
+        results = all_users_balance_helper()
         # response, chat_id = write_specific_helper(message, from_label, chat_id=12345) # ToDo: use if there are multiple outputs
         print(results)
         return JsonResponse({"test": results})
